@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdaptEduca - Área do Aluno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="logo">
+          <span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+          AdaptEduca
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">Início</a></li>
+          <li><a href="aluno.html" class="active">Sou Aluno</a></li>
+          <li><a href="responsavel.html">Sou Responsável</a></li>
+          <li><a href="professor.html">Sou Professor</a></li>
+          <li><a href="precos.html">Preços</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="entrar.html" class="btn-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Entrar
+          </a>
+          <a href="cadastrar.html" class="btn btn-primary">Cadastrar</a>
+          <button class="mobile-menu-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dash-hero">
+    <div class="container">
+      <h1>Olá, Maria! 👋</h1>
+      <p>Pronta para continuar aprendendo hoje?</p>
+      <div class="pref-card">
+        <div class="pl">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:4px;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Seu método de aprendizagem preferido:
+        </div>
+        <div class="chips">
+          <span class="chip">Visual/Vídeos</span>
+          <span class="chip">Mapas Mentais</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dash-content">
+    <div class="container">
+
+      <div class="search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar conteúdos...">
+      </div>
+
+      <h3 class="panel-title" style="margin-bottom: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Seu Progresso
+      </h3>
+
+      <div class="stat-grid">
+        <div class="stat-card" style="background:#ede9fe; border-color:transparent;">
+          <div><div class="stat-value" style="color:#6d28d9;">12</div><div class="stat-label">Concluídos</div></div>
+        </div>
+        <div class="stat-card" style="background:#fce7f3; border-color:transparent;">
+          <div><div class="stat-value" style="color:#be185d;">8</div><div class="stat-label">Em Andamento</div></div>
+        </div>
+        <div class="stat-card" style="background:#dbeafe; border-color:transparent;">
+          <div><div class="stat-value" style="color:#1d4ed8;">5</div><div class="stat-label">Para Iniciar</div></div>
+        </div>
+        <div class="stat-card" style="background:#d1fae5; border-color:transparent;">
+          <div><div class="stat-value" style="color:#047857;">75%</div><div class="stat-label">Taxa de Conclusão</div></div>
+        </div>
+      </div>
+
+      <div data-chip-group style="display:flex; gap:10px; flex-wrap:wrap; margin: 8px 0 22px;">
+        <button class="chip active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+          Matemática
+        </button>
+        <button class="chip">✏️ Português</button>
+        <button class="chip">🏛️ História</button>
+        <button class="chip">🔬 Ciências</button>
+      </div>
+
+      <div class="content-item">
+        <div class="content-item-head">
+          <h4>Equações do 2º Grau</h4>
+          <span class="chip chip-success">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Concluído
+          </span>
+        </div>
+        <div class="content-item-meta">
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Vídeo</span>
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Resumo</span>
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/></svg> Áudio</span>
+        </div>
+        <div class="progress"><div class="progress-bar" data-progress="100"></div></div>
+      </div>
+
+      <div class="content-item">
+        <div class="content-item-head">
+          <h4>Geometria Espacial</h4>
+          <span style="font-size:13px; color: var(--primary); font-weight: 600;">60%</span>
+        </div>
+        <div class="content-item-meta">
+          <span>📺 Vídeo</span><span>📄 Resumo</span><span>🎧 Áudio</span>
+        </div>
+        <div class="progress"><div class="progress-bar gradient" data-progress="60"></div></div>
+      </div>
+
+      <div class="content-item">
+        <div class="content-item-head">
+          <h4>Funções Trigonométricas</h4>
+          <span style="font-size:13px; color: var(--text-muted);">Não iniciado</span>
+        </div>
+        <div class="content-item-meta">
+          <span>📺 Vídeo</span><span>📄 Resumo</span><span>🎧 Áudio</span>
+        </div>
+        <div class="progress"><div class="progress-bar" data-progress="0"></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

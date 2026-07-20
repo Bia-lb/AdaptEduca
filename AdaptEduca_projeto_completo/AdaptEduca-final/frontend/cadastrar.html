@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdaptEduca - Cadastro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="auth-wrap">
+    <div class="auth-card lg">
+      <a href="index.html" class="logo" style="justify-content:center; margin-bottom:24px;">
+        <span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+        AdaptEduca
+      </a>
+
+      <div class="auth-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      </div>
+
+      <h1>Criar Conta</h1>
+      <p class="auth-sub">Preencha os dados para começar</p>
+
+      <form data-form="signup">
+        <label style="display:block; font-size: 13.5px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px;">Tipo de Perfil</label>
+        <div class="profile-types">
+          <div class="profile-type selected">
+            <div class="pt-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <h4>Aluno</h4>
+            <p>Quero aprender do meu jeito</p>
+          </div>
+          <div class="profile-type">
+            <div class="pt-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+            <h4>Professor</h4>
+            <p>Vou ensinar e acompanhar alunos</p>
+          </div>
+          <div class="profile-type">
+            <div class="pt-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+            <h4>Responsável</h4>
+            <p>Vou acompanhar meus filhos</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-name">Nome Completo</label>
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="reg-name" class="input" placeholder="Seu nome completo" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">E-mail</label>
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="reg-email" class="input" placeholder="seu@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-pwd">Senha</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="reg-pwd" class="input" placeholder="••••••••" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-pwd2">Confirmar senha</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="reg-pwd2" class="input" placeholder="••••••••" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-meta" style="justify-content:flex-start; margin: 14px 0 22px;">
+          <label><input type="checkbox" required> Concordo com os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a></label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Criar Conta</button>
+      </form>
+
+      <p class="auth-foot">Já tem uma conta? <a href="entrar.html">Faça login</a></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
