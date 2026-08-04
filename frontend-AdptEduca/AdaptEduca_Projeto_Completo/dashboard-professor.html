@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel do professor AdaptEduca com visão das turmas e desempenho dos alunos.">
+  <title>Painel do Professor | AdaptEduca</title>
+  <script>document.documentElement.dataset.theme=localStorage.getItem('adapteduca_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');</script>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="reference-dashboard professor-reference" data-root="./" data-page="dashboard-professor" data-private="true" data-role="professor" data-reference-header="true">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero role-dashboard-hero">
+      <div class="container">
+        <h1>Bem-vindo, Professor(a) <span data-user-first>Carlos</span>! <span aria-hidden="true">👨‍🏫</span></h1>
+        <p>Aqui está um resumo do desempenho das suas turmas</p>
+      </div>
+    </section>
+
+    <div class="container dashboard-shell role-dashboard-shell">
+      <section class="stat-grid reference-stat-grid" aria-label="Resumo do professor">
+        <button class="card stat-card reference-stat-card" type="button" data-navigate="alunos.html">
+          <span class="stat-icon is-blue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19M16 5.5a3 3 0 0 1 0 5.8M17 13a4 4 0 0 1 3.5 4v2"/></svg></span>
+          <span class="stat-copy"><strong>90</strong><small>Total de Alunos</small></span>
+        </button>
+        <button class="card stat-card reference-stat-card" type="button" data-navigate="relatorios-professor.html">
+          <span class="stat-icon is-green"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16 5-5 4 3 7-8M15 6h5v5"/></svg></span>
+          <span class="stat-copy"><strong>75%</strong><small>Progresso Médio</small></span>
+        </button>
+        <button class="card stat-card reference-stat-card" type="button" data-navigate="materiais.html">
+          <span class="stat-icon is-purple"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V9M10 19V5M15 19v-7M20 19V3"/></svg></span>
+          <span class="stat-copy"><strong>51</strong><small>Conteúdos Cadastrados</small></span>
+        </button>
+        <button class="card stat-card reference-stat-card" type="button" data-info-title="Alunos que precisam de apoio" data-info-text="Maria precisa revisar Geometria Espacial e Lucas precisa de reforço em Interpretação de Texto.">
+          <span class="stat-icon is-red"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v5M12 16.5v.1"/></svg></span>
+          <span class="stat-copy"><strong>2</strong><small>Precisam de Apoio</small></span>
+        </button>
+      </section>
+
+      <section class="card panel reference-panel class-overview-panel">
+        <h2 class="panel-title">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-5 9 5-9 5-9-5ZM6 11.5V16c3.4 2.2 8.6 2.2 12 0v-4.5M21 9v6"/></svg>
+          Visão Geral das Turmas
+        </h2>
+        <div class="class-overview">
+          <button class="class-card" type="button" data-info-title="9º Ano A" data-info-text="32 alunos, progresso médio de 78% e 4 atividades em andamento.">
+            <h3>9º Ano A</h3>
+            <dl><dt>Alunos:</dt><dd>32</dd><dt>Progresso Médio:</dt><dd>78%</dd></dl>
+            <div class="progress"><span style="width:78%"></span></div>
+          </button>
+          <button class="class-card" type="button" data-info-title="9º Ano B" data-info-text="28 alunos, progresso médio de 82% e 3 atividades em andamento.">
+            <h3>9º Ano B</h3>
+            <dl><dt>Alunos:</dt><dd>28</dd><dt>Progresso Médio:</dt><dd>82%</dd></dl>
+            <div class="progress"><span style="width:82%"></span></div>
+          </button>
+          <button class="class-card" type="button" data-info-title="8º Ano A" data-info-text="30 alunos, progresso médio de 65% e 6 atividades em andamento.">
+            <h3>8º Ano A</h3>
+            <dl><dt>Alunos:</dt><dd>30</dd><dt>Progresso Médio:</dt><dd>65%</dd></dl>
+            <div class="progress"><span style="width:65%"></span></div>
+          </button>
+        </div>
+      </section>
+
+      <section class="card panel reference-panel student-monitor-panel">
+        <h2 class="panel-title">Acompanhamento Individual</h2>
+        <div class="student-monitor">
+          <article class="student-card">
+            <button class="student-card-main" type="button" data-info-title="Maria Silva" data-info-text="Maria possui 85% de progresso geral. A principal dificuldade identificada é Geometria Espacial.">
+              <span class="student-card-head"><span><strong>Maria Silva</strong><small>9º Ano A</small></span><span class="performance-badge is-good">Bom Desempenho</span></span>
+              <span class="student-metrics">
+                <span class="student-metric"><small>Progresso Geral</small><strong>85%</strong></span>
+                <span class="student-metric"><small>Concluídos</small><strong>24</strong></span>
+                <span class="student-metric"><small>Em Andamento</small><strong>6</strong></span>
+              </span>
+              <span class="difficulty-box"><small>Dificuldades identificadas:</small><span class="difficulty-chip">Geometria Espacial</span></span>
+              <span class="progress"><span style="width:85%"></span></span>
+            </button>
+          </article>
+
+          <article class="student-card">
+            <button class="student-card-main" type="button" data-info-title="João Santos" data-info-text="João possui 92% de progresso geral e desempenho excelente.">
+              <span class="student-card-head"><span><strong>João Santos</strong><small>9º Ano A</small></span><span class="performance-badge is-excellent">✓ Excelente</span></span>
+              <span class="student-metrics">
+                <span class="student-metric"><small>Progresso Geral</small><strong>92%</strong></span>
+                <span class="student-metric"><small>Concluídos</small><strong>28</strong></span>
+                <span class="student-metric"><small>Em Andamento</small><strong>4</strong></span>
+              </span>
+              <span class="progress"><span style="width:92%"></span></span>
+            </button>
+          </article>
+
+          <article class="student-card">
+            <button class="student-card-main" type="button" data-info-title="Carla Mendes" data-info-text="Carla possui 88% de progresso geral e desempenho excelente.">
+              <span class="student-card-head"><span><strong>Carla Mendes</strong><small>8º Ano A</small></span><span class="performance-badge is-excellent">✓ Excelente</span></span>
+              <span class="student-metrics">
+                <span class="student-metric"><small>Progresso Geral</small><strong>88%</strong></span>
+                <span class="student-metric"><small>Concluídos</small><strong>26</strong></span>
+                <span class="student-metric"><small>Em Andamento</small><strong>3</strong></span>
+              </span>
+              <span class="progress"><span style="width:88%"></span></span>
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <section class="card panel reference-panel subjects-panel">
+        <h2 class="panel-title">Conteúdos Cadastrados</h2>
+        <div class="subject-overview">
+          <button class="subject-card" type="button" data-subject-filter="Matemática"><h3>Matemática</h3><dl><dt>Tópicos:</dt><dd>15</dd><dt>Visualizações:</dt><dd>342</dd></dl></button>
+          <button class="subject-card" type="button" data-subject-filter="Português"><h3>Português</h3><dl><dt>Tópicos:</dt><dd>12</dd><dt>Visualizações:</dt><dd>298</dd></dl></button>
+          <button class="subject-card" type="button" data-subject-filter="História"><h3>História</h3><dl><dt>Tópicos:</dt><dd>10</dd><dt>Visualizações:</dt><dd>245</dd></dl></button>
+          <button class="subject-card" type="button" data-subject-filter="Ciências"><h3>Ciências</h3><dl><dt>Tópicos:</dt><dd>14</dd><dt>Visualizações:</dt><dd>312</dd></dl></button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script defer src="js/data.js"></script>
+  <script defer src="js/theme.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/components.js"></script>
+  <script defer src="js/script.js"></script>
+</body>
+</html>

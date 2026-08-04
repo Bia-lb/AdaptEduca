@@ -1,0 +1,803 @@
+# Desenvolvimento do Front-end da Plataforma AdaptEduca
+
+Vou enviar uma sequência de prints contendo o layout completo do meu projeto. Sua tarefa é analisar cuidadosamente todas as imagens e recriar o site da forma mais fiel possível, utilizando exclusivamente HTML5, CSS3 e JavaScript puro.
+
+## Regra principal
+
+Todas as páginas, telas, modais, menus, componentes, estados e variações visuais apresentados nos prints enviados devem ser desenvolvidos.
+
+Não implemente apenas as páginas citadas neste documento. Os prints são a principal referência do projeto e todas as telas que aparecerem neles fazem parte obrigatória da entrega.
+
+Nenhuma página mostrada nas imagens poderá ser ignorada, resumida, substituída por uma tela genérica ou deixada apenas como demonstração.
+
+Caso os prints apresentem páginas ou funcionalidades que não estejam descritas textualmente neste documento, elas também deverão ser implementadas seguindo fielmente o layout apresentado.
+
+Antes de iniciar o desenvolvimento:
+
+1. Analise todos os prints enviados.
+2. Identifique todas as páginas existentes.
+3. Identifique menus, submenus, dashboards, formulários, cards, tabelas, modais, filtros e componentes.
+4. Organize a navegação completa entre essas páginas.
+5. Desenvolva todas as telas encontradas nas imagens.
+6. Garanta que nenhum botão visível nos prints fique sem uma interação correspondente.
+
+O foco desta etapa é desenvolver somente o front-end, deixando toda a estrutura preparada para uma futura integração com PHP e MySQL.
+
+---
+
+# Tecnologias obrigatórias
+
+Utilizar somente:
+
+* HTML5 semântico;
+* CSS3;
+* JavaScript puro, também chamado de Vanilla JavaScript.
+
+Não utilizar:
+
+* React;
+* Vue;
+* Angular;
+* Bootstrap;
+* Tailwind;
+* jQuery;
+* frameworks CSS;
+* frameworks JavaScript;
+* bibliotecas que substituam a construção manual da interface.
+
+O código deverá ser limpo, organizado, padronizado e comentado.
+
+Os arquivos deverão ser separados em HTML, CSS e JavaScript.
+
+---
+
+# Estrutura do projeto
+
+Organize o projeto utilizando uma estrutura semelhante a:
+
+```text
+/adapteduca
+│
+├── index.html
+├── login.html
+├── cadastro.html
+│
+├── /pages
+│   ├── funcionalidades.html
+│   ├── planos.html
+│   ├── questionario-aluno.html
+│   ├── dashboard-aluno.html
+│   ├── dashboard-professor.html
+│   ├── dashboard-responsavel.html
+│   └── demais-paginas-encontradas-nos-prints.html
+│
+├── /css
+│   ├── reset.css
+│   ├── variables.css
+│   ├── components.css
+│   ├── responsive.css
+│   └── style.css
+│
+├── /js
+│   ├── auth.js
+│   ├── theme.js
+│   ├── navigation.js
+│   ├── components.js
+│   ├── questionnaire.js
+│   └── script.js
+│
+├── /components
+│   ├── header.html
+│   ├── sidebar.html
+│   ├── footer.html
+│   └── demais-componentes-reutilizaveis.html
+│
+└── /img
+    ├── icons
+    ├── illustrations
+    ├── avatars
+    └── logos
+```
+
+Utilize nomes claros, padronizados e descritivos para arquivos, classes, IDs, funções e variáveis.
+
+Evite código duplicado e crie componentes reutilizáveis sempre que possível.
+
+---
+
+# Fidelidade aos prints
+
+Os prints enviados são a principal referência visual.
+
+Reproduza com o máximo de fidelidade possível:
+
+* todas as páginas apresentadas;
+* estrutura dos layouts;
+* cabeçalhos;
+* barras laterais;
+* menus;
+* submenus;
+* rodapés;
+* cards;
+* tabelas;
+* filtros;
+* campos de pesquisa;
+* formulários;
+* modais;
+* abas;
+* gráficos;
+* indicadores;
+* avatares;
+* ícones;
+* alertas;
+* botões;
+* estados ativos;
+* estados vazios;
+* mensagens;
+* paginação;
+* espaçamentos;
+* cores;
+* tipografia;
+* tamanhos;
+* alinhamentos;
+* bordas;
+* sombras;
+* ilustrações;
+* animações;
+* efeitos hover;
+* microinterações.
+
+Não criar apenas uma versão aproximada ou genérica.
+
+Cada página deverá manter a mesma identidade visual apresentada nos prints.
+
+Caso algum trecho esteja parcialmente cortado ou não esteja totalmente visível, complete-o utilizando o mesmo padrão visual, estrutural e funcional das demais telas.
+
+Quando um mesmo componente aparecer em várias telas, ele deverá manter o mesmo estilo e comportamento.
+
+---
+
+# Obrigatoriedade de execução de todas as páginas
+
+Todas as páginas presentes nos prints deverão possuir arquivos, rotas ou estruturas próprias e deverão estar acessíveis pela navegação da plataforma.
+
+Também deverão ser implementadas:
+
+* páginas exibidas parcialmente;
+* páginas acessadas por menus laterais;
+* páginas abertas por botões;
+* telas de detalhes;
+* telas de edição;
+* telas de criação;
+* telas de confirmação;
+* modais;
+* dropdowns;
+* menus de perfil;
+* abas internas;
+* estados alternativos de uma mesma página;
+* versões específicas para aluno, professor e responsável;
+* telas vazias;
+* telas com dados simulados;
+* páginas de configurações;
+* páginas administrativas exibidas nas imagens;
+* qualquer outra interface presente nos prints.
+
+Não utilizar links com `href="#"` sem funcionamento.
+
+Não deixar botões importantes sem ação.
+
+Quando a funcionalidade depender do futuro back-end, simule o comportamento utilizando JavaScript e dados fictícios.
+
+---
+
+# Responsividade
+
+O site deverá funcionar corretamente em:
+
+* desktop;
+* notebook;
+* tablet;
+* smartphone.
+
+Utilize:
+
+* Flexbox;
+* CSS Grid;
+* media queries;
+* unidades responsivas;
+* componentes adaptáveis.
+
+Em dispositivos menores:
+
+* o menu lateral poderá ser recolhido;
+* tabelas deverão permitir rolagem ou adaptação;
+* cards deverão ser reorganizados;
+* formulários deverão ocupar a largura disponível;
+* modais deverão respeitar o tamanho da tela;
+* textos, botões e campos deverão permanecer legíveis;
+* nenhuma informação poderá ficar cortada;
+* nenhuma página deverá gerar rolagem horizontal indevida.
+
+---
+
+# Modo claro e escuro
+
+Criar um botão para alternar entre:
+
+* modo claro;
+* modo escuro.
+
+Requisitos:
+
+* salvar a preferência no `localStorage`;
+* aplicar o tema salvo ao abrir qualquer página;
+* manter excelente contraste;
+* garantir a legibilidade de todos os textos;
+* adaptar cards, tabelas, menus, inputs, modais, gráficos e botões;
+* manter a identidade visual da plataforma nos dois temas;
+* utilizar variáveis CSS para facilitar a manutenção dos temas;
+* evitar o efeito de troca brusca de tema durante o carregamento da página.
+
+---
+
+# Área pública e área privada
+
+A plataforma possui uma área pública e uma área privada.
+
+## Área pública
+
+Visitantes sem autenticação poderão acessar somente:
+
+* Página Inicial;
+* Funcionalidades;
+* Planos e Preços;
+* Login;
+* Cadastro.
+
+Nenhuma página privada poderá ser acessada sem login.
+
+Caso uma pessoa tente acessar diretamente uma página privada pela URL, deverá ser redirecionada automaticamente para a página de Login.
+
+## Menu público
+
+O menu da área pública deverá conter apenas:
+
+* Início;
+* Funcionalidades;
+* Planos;
+* Entrar;
+* Criar Conta.
+
+---
+
+# Login e cadastro
+
+Criar telas modernas e responsivas de Login e Cadastro.
+
+Durante o cadastro, o usuário deverá escolher um perfil:
+
+* Aluno;
+* Professor;
+* Responsável.
+
+Após concluir o cadastro ou realizar o login, o sistema deverá identificar o perfil salvo e direcionar o usuário para sua área correspondente.
+
+Utilize JavaScript e `localStorage` para simular:
+
+* criação de conta;
+* login;
+* sessão ativa;
+* logout;
+* perfil do usuário;
+* proteção de páginas;
+* redirecionamento;
+* conclusão do questionário;
+* preferências do usuário.
+
+A estrutura deverá ser organizada para permitir que essa autenticação simulada seja substituída futuramente por PHP, MySQL e sessões reais.
+
+---
+
+# Controle de acesso por perfil
+
+Um usuário não poderá acessar páginas de outro perfil.
+
+Exemplos:
+
+* aluno não poderá acessar o painel do professor;
+* aluno não poderá acessar o painel do responsável;
+* professor não poderá acessar o painel do aluno;
+* professor não poderá acessar o painel do responsável;
+* responsável não poderá acessar o painel do aluno;
+* responsável não poderá acessar o painel do professor.
+
+Caso tente acessar uma página proibida, deverá ser redirecionado automaticamente para seu próprio Dashboard.
+
+Criar uma função centralizada para validar:
+
+* autenticação;
+* perfil autorizado;
+* questionário pendente;
+* rota atual;
+* redirecionamento adequado.
+
+---
+
+# Fluxo do aluno
+
+Ao criar uma conta como Aluno, o usuário não deverá acessar diretamente o Dashboard.
+
+Após preencher o cadastro, deverá ser direcionado para o Questionário de Perfil de Aprendizagem.
+
+Somente depois de concluir o questionário poderá acessar o Dashboard do Aluno.
+
+Caso tente acessar o Dashboard sem ter concluído o questionário, deverá ser redirecionado novamente para o formulário.
+
+---
+
+# Questionário de Perfil de Aprendizagem
+
+Criar um formulário moderno em múltiplas etapas, no formato `Multi-Step Form`.
+
+O formulário deverá possuir:
+
+* indicador de progresso;
+* indicação da etapa atual;
+* botão para avançar;
+* botão para voltar;
+* validação dos campos;
+* mensagens de erro;
+* transições suaves;
+* salvamento temporário das respostas;
+* manutenção das respostas ao retornar para uma etapa;
+* funcionamento em dispositivos móveis.
+
+## Etapa de informações
+
+Campos:
+
+* Nome;
+* Idade;
+* Série;
+* Escola.
+
+## Como aprende melhor?
+
+Permitir múltipla escolha:
+
+* Lendo textos;
+* Vídeos;
+* Áudios;
+* Resumos;
+* Mapas Mentais;
+* Infográficos;
+* Exercícios;
+* Flashcards.
+
+## Melhor horário para estudar
+
+* Manhã;
+* Tarde;
+* Noite.
+
+## Tempo médio de concentração
+
+* Menos de 15 minutos;
+* 15 a 30 minutos;
+* 30 a 60 minutos;
+* Mais de 1 hora.
+
+## Necessidades educacionais
+
+* TDAH;
+* TEA;
+* Dislexia;
+* Discalculia;
+* Baixa visão;
+* Deficiência auditiva;
+* Nenhuma;
+* Outro.
+
+Ao selecionar “Outro”, exibir um campo adicional para preenchimento.
+
+## Como prefere as explicações?
+
+* Objetivas;
+* Detalhadas;
+* Passo a passo;
+* Com exemplos;
+* Com imagens.
+
+## Tamanho do conteúdo
+
+* Curto;
+* Médio;
+* Longo.
+
+## Forma preferida de avaliação
+
+* Questões objetivas;
+* Questões discursivas;
+* Exercícios;
+* Flashcards;
+* Quiz.
+
+## Finalização
+
+Ao concluir, mostrar uma tela com a mensagem:
+
+“Perfil de aprendizagem concluído com sucesso! Agora nossa IA poderá adaptar os conteúdos enviados pelos seus professores da maneira mais eficiente para você.”
+
+Adicionar o botão:
+
+“Ir para o Dashboard”
+
+Ao clicar no botão, salvar a conclusão no `localStorage` e direcionar o aluno ao Dashboard.
+
+---
+
+# Dashboard do Aluno
+
+Criar um Dashboard moderno contendo, no mínimo:
+
+* conteúdos recentes;
+* conteúdos adaptados;
+* recomendações da IA;
+* histórico;
+* próximas atividades;
+* progresso;
+* estatísticas;
+* metas de estudo;
+* tempo estudado;
+* conteúdos concluídos;
+* notificações;
+* atalhos rápidos.
+
+Além desses elementos, reproduza todos os cards, gráficos, menus, informações e componentes apresentados nos prints do Dashboard do Aluno.
+
+---
+
+# Página de Funcionalidades
+
+Criar uma página moderna apresentando recursos como:
+
+* adaptação automática com IA;
+* resumos inteligentes;
+* áudios;
+* mapas mentais;
+* exercícios personalizados;
+* flashcards;
+* painel do professor;
+* relatórios;
+* acompanhamento dos responsáveis.
+
+Utilizar cards com:
+
+* ícones;
+* títulos;
+* descrições;
+* efeitos hover;
+* animações suaves;
+* chamadas para ação.
+
+Também reproduzir qualquer outra funcionalidade exibida nos prints.
+
+---
+
+# Página de Adaptação de Conteúdo
+
+Essa será uma das principais telas da plataforma.
+
+Cada conteúdo deverá exibir:
+
+* nome da matéria;
+* professor;
+* data;
+* conteúdo original;
+* conteúdo adaptado pela IA.
+
+Criar botões para:
+
+* Ler resumo;
+* Ouvir áudio;
+* Ver mapa mental;
+* Gerar exercícios;
+* Gerar flashcards;
+* Conversar com a IA.
+
+As funções poderão ser simuladas visualmente utilizando JavaScript.
+
+Exemplos de simulações:
+
+* abrir modal com resumo;
+* exibir player de áudio fictício;
+* mostrar mapa mental;
+* gerar perguntas de demonstração;
+* apresentar flashcards navegáveis;
+* abrir uma interface de chat com respostas simuladas.
+
+Ao lado do conteúdo, criar um painel mostrando:
+
+* progresso;
+* tempo estudado;
+* conteúdos concluídos;
+* nível de compreensão.
+
+Reproduzir também todas as abas, controles, painéis e estados apresentados nos prints dessa página.
+
+---
+
+# Área do Professor
+
+Após o login como Professor, o usuário deverá acessar uma área exclusiva.
+
+O menu deverá conter, no mínimo:
+
+* Dashboard;
+* Turmas;
+* Alunos;
+* Enviar Conteúdo;
+* Gerenciar Materiais;
+* Atividades;
+* Relatórios;
+* Configurações.
+
+Todas as páginas da área do professor apresentadas nos prints deverão ser desenvolvidas individualmente.
+
+Simular funcionalidades como:
+
+* criação de turma;
+* visualização de alunos;
+* envio de conteúdo;
+* seleção da matéria;
+* criação de atividades;
+* edição de materiais;
+* exclusão de materiais;
+* filtros;
+* busca;
+* relatórios;
+* gráficos;
+* acompanhamento do desempenho;
+* abertura de detalhes de um aluno;
+* notificações;
+* configurações do perfil.
+
+Utilizar dados fictícios organizados em JavaScript.
+
+---
+
+# Área do Responsável
+
+Após o login como Responsável, o usuário deverá acessar um painel exclusivo contendo:
+
+* Dashboard;
+* Acompanhamento do aluno;
+* Desempenho;
+* Progresso;
+* Relatórios;
+* Comunicados;
+* Configurações.
+
+Todas as páginas da área do responsável mostradas nos prints deverão ser implementadas.
+
+Simular funcionalidades como:
+
+* escolha do aluno acompanhado;
+* visualização de desempenho;
+* progresso por disciplina;
+* tempo de estudo;
+* atividades concluídas;
+* atividades pendentes;
+* comunicados recebidos;
+* relatórios;
+* gráficos;
+* filtros por período;
+* notificações;
+* configurações de conta.
+
+---
+
+# Página de Planos
+
+Criar uma página de preços moderna e responsiva.
+
+## Plano Gratuito
+
+Apresentar recursos básicos.
+
+## Plano Premium
+
+Apresentar recursos como:
+
+* IA Adaptativa;
+* Áudios;
+* Flashcards;
+* Mapas Mentais;
+* Exercícios ilimitados.
+
+## Plano Institucional
+
+Plano voltado para escolas e instituições de ensino.
+
+Adicionar:
+
+* comparação de recursos;
+* destaque para o plano recomendado;
+* botões de assinatura;
+* alternância entre cobrança mensal e anual, caso apareça nos prints;
+* perguntas frequentes, caso apareçam nas imagens.
+
+Os botões funcionarão apenas como demonstração e poderão abrir um modal informativo.
+
+---
+
+# Interações e funcionalidades simuladas
+
+Mesmo sem o back-end, o front-end deverá parecer funcional.
+
+Utilizar JavaScript para implementar:
+
+* navegação;
+* abertura e fechamento de menus;
+* menus mobile;
+* dropdowns;
+* modais;
+* tooltips;
+* abas;
+* acordeões;
+* filtros;
+* pesquisas;
+* paginação;
+* ordenação de tabelas;
+* validação de formulários;
+* mensagens de sucesso;
+* mensagens de erro;
+* notificações;
+* seleção de cards;
+* atualização de progresso;
+* troca de tema;
+* login;
+* cadastro;
+* logout;
+* controle de perfil;
+* proteção de rotas;
+* questionário em etapas;
+* gráficos ou indicadores simulados;
+* upload visual de arquivos;
+* pré-visualização de conteúdos;
+* interações presentes nos prints.
+
+Todos os botões visíveis deverão possuir algum comportamento coerente.
+
+---
+
+# Design
+
+O visual deverá seguir o padrão de plataformas modernas como:
+
+* Notion;
+* Canva;
+* Duolingo;
+* Google Classroom;
+* Figma.
+
+Características desejadas:
+
+* interface limpa;
+* aparência profissional;
+* visual moderno;
+* navegação intuitiva;
+* estilo minimalista;
+* bordas arredondadas;
+* sombras suaves;
+* animações discretas;
+* transições suaves;
+* boa hierarquia visual;
+* excelente experiência do usuário;
+* acessibilidade;
+* boa legibilidade;
+* consistência entre todas as telas.
+
+Os prints, porém, possuem prioridade sobre essas referências.
+
+Caso exista diferença entre este texto e as imagens, siga primeiro o padrão visual apresentado nos prints.
+
+---
+
+# Acessibilidade
+
+Implementar boas práticas de acessibilidade:
+
+* textos alternativos em imagens;
+* labels associados aos campos;
+* contraste adequado;
+* foco visível;
+* navegação por teclado;
+* atributos `aria` quando necessários;
+* botões com descrições claras;
+* HTML semântico;
+* mensagens de erro acessíveis;
+* respeito à preferência de redução de movimento do usuário.
+
+---
+
+# Preparação para PHP e MySQL
+
+Apesar de o projeto utilizar somente front-end nesta etapa, organize o código para futura integração.
+
+Requisitos:
+
+* separar dados simulados da interface;
+* centralizar funções de autenticação;
+* evitar lógica diretamente espalhada no HTML;
+* preparar formulários com atributos `name`;
+* utilizar IDs consistentes;
+* organizar os dados em objetos;
+* criar funções reutilizáveis;
+* indicar nos comentários os pontos que futuramente chamarão o back-end;
+* evitar dependência excessiva do `localStorage`;
+* estruturar o projeto para que o `localStorage` possa ser substituído por APIs e sessões PHP.
+
+---
+
+# Dados simulados
+
+Criar dados fictícios realistas para preencher:
+
+* usuários;
+* professores;
+* alunos;
+* responsáveis;
+* turmas;
+* disciplinas;
+* conteúdos;
+* atividades;
+* notas;
+* progresso;
+* relatórios;
+* comunicados;
+* recomendações;
+* notificações;
+* gráficos;
+* histórico.
+
+Não deixar as telas vazias, exceto quando um estado vazio específico estiver apresentado nos prints.
+
+---
+
+# Entrega
+
+A entrega deverá conter:
+
+* todos os arquivos HTML;
+* todos os arquivos CSS;
+* todos os arquivos JavaScript;
+* imagens e ícones utilizados;
+* estrutura completa de pastas;
+* todas as páginas presentes nos prints;
+* navegação funcional;
+* responsividade;
+* modo claro e escuro;
+* autenticação simulada;
+* controle de acesso por perfil;
+* formulário de perfil do aluno;
+* dashboards;
+* páginas públicas;
+* páginas privadas;
+* interações simuladas;
+* comentários no código;
+* um arquivo `README.md` explicando como executar o projeto.
+
+O projeto deverá funcionar abrindo o arquivo inicial ou utilizando uma extensão como Live Server.
+
+Não entregar apenas trechos de código.
+
+Não entregar somente uma página como exemplo.
+
+Não criar somente um protótipo visual.
+
+Não omitir páginas consideradas secundárias.
+
+Não substituir várias telas por uma única página genérica.
+
+O resultado esperado é um front-end completo, profissional, navegável e fiel a todas as páginas enviadas nos prints, pronto para receber uma integração futura com PHP e MySQL.
