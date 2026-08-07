@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel do responsável AdaptEduca com acompanhamento do progresso dos filhos.">
+  <title>Painel do Responsável | AdaptEduca</title>
+  <script>document.documentElement.dataset.theme=localStorage.getItem('adapteduca_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');</script>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="reference-dashboard responsible-reference" data-root="./" data-page="dashboard-responsavel" data-private="true" data-role="responsavel" data-reference-header="true">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero role-dashboard-hero">
+      <div class="container">
+        <h1>Olá, <span data-user-name>Sr(a). Silva</span>! <span aria-hidden="true">👫</span></h1>
+        <p>Acompanhe o progresso dos seus filhos</p>
+      </div>
+    </section>
+
+    <div class="container dashboard-shell role-dashboard-shell">
+      <section class="stat-grid reference-stat-grid" aria-label="Resumo do responsável">
+        <button class="card stat-card reference-stat-card" type="button" data-info-title="Filhos cadastrados" data-info-text="Maria Silva e João Silva estão vinculados ao seu perfil.">
+          <span class="stat-icon is-blue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19M16 5.5a3 3 0 0 1 0 5.8M17 13a4 4 0 0 1 3.5 4v2"/></svg></span>
+          <span class="stat-copy"><strong>2</strong><small>Filhos Cadastrados</small></span>
+        </button>
+        <button class="card stat-card reference-stat-card" type="button" data-navigate="progresso-responsavel.html">
+          <span class="stat-icon is-green"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16 5-5 4 3 7-8M15 6h5v5"/></svg></span>
+          <span class="stat-copy"><strong>74%</strong><small>Progresso Médio</small></span>
+        </button>
+        <button class="card stat-card reference-stat-card" type="button" data-navigate="comunicados.html">
+          <span class="stat-icon is-purple"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.6 8.6 0 0 1-3-.6L4 20l1.6-4A7.5 7.5 0 1 1 20 11.5Z"/></svg></span>
+          <span class="stat-copy"><strong>2</strong><small>Mensagens Não Lidas</small></span>
+        </button>
+        <button class="card stat-card reference-stat-card" type="button" data-info-title="Alertas" data-info-text="João apresenta baixo desempenho em Português e precisa de apoio.">
+          <span class="stat-icon is-red"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 20h4"/></svg></span>
+          <span class="stat-copy"><strong>1</strong><small>Alertas</small></span>
+        </button>
+      </section>
+
+      <section class="card child-card reference-child-card">
+        <header class="child-head">
+          <span class="child-avatar" aria-hidden="true">👧</span>
+          <span class="child-identity"><h2>Maria Silva</h2><p>9º Ano A · 14 anos</p></span>
+          <span class="child-progress"><strong>85%</strong><small>Progresso Geral</small></span>
+        </header>
+
+        <div class="child-grid">
+          <button class="child-metric" type="button" data-info-title="Atividades concluídas" data-info-text="Maria concluiu 24 atividades."><small>Atividades Concluídas</small><strong>24</strong></button>
+          <button class="child-metric" type="button" data-info-title="Atividades em andamento" data-info-text="Maria possui 6 atividades em andamento."><small>Em Andamento</small><strong>6</strong></button>
+          <button class="child-metric next-class" type="button" data-info-title="Próxima aula" data-info-text="Matemática - Geometria Espacial, hoje às 14:00."><small>▣ Próxima Aula</small><strong>Matemática - Geometria Espacial</strong><span>Hoje, 14:00</span></button>
+        </div>
+
+        <div class="strength-support one-column-support">
+          <div class="strength-box"><strong>♙ Pontos Fortes</strong><div><span class="chip">Matemática</span><span class="chip">Ciências</span></div></div>
+        </div>
+
+        <div class="recent-activities">
+          <h3>Atividades Recentes</h3>
+          <button class="activity-row" type="button" data-info-title="Equações do 2º Grau" data-info-text="Maria concluiu o conteúdo Equações do 2º Grau há 2 horas."><span class="activity-dot is-green"></span><span><strong>Matemática</strong><small>Concluiu: Equações do 2º Grau</small></span><time>2h atrás</time></button>
+          <button class="activity-row" type="button" data-info-title="Análise Sintática" data-info-text="Maria assistiu ao vídeo de Análise Sintática há 5 horas."><span class="activity-dot is-purple"></span><span><strong>Português</strong><small>Assistiu vídeo: Análise Sintática</small></span><time>5h atrás</time></button>
+        </div>
+
+        <div class="child-progress-footer"><span>Progresso Total</span><strong>85%</strong></div>
+        <div class="progress"><span style="width:85%"></span></div>
+      </section>
+
+      <section class="card child-card reference-child-card">
+        <header class="child-head">
+          <span class="child-avatar" aria-hidden="true">👦</span>
+          <span class="child-identity"><h2>João Silva</h2><p>7º Ano B · 12 anos</p></span>
+          <span class="child-progress"><strong>62%</strong><small>Progresso Geral</small></span>
+        </header>
+
+        <div class="child-alert"><span>!</span> Baixo desempenho em Português</div>
+
+        <div class="child-grid">
+          <button class="child-metric" type="button" data-info-title="Atividades concluídas" data-info-text="João concluiu 15 atividades."><small>Atividades Concluídas</small><strong>15</strong></button>
+          <button class="child-metric" type="button" data-info-title="Atividades em andamento" data-info-text="João possui 8 atividades em andamento."><small>Em Andamento</small><strong>8</strong></button>
+          <button class="child-metric next-class" type="button" data-info-title="Próxima aula" data-info-text="História - Brasil Colônia, amanhã às 10:00."><small>▣ Próxima Aula</small><strong>História - Brasil Colônia</strong><span>Amanhã, 10:00</span></button>
+        </div>
+
+        <div class="strength-support">
+          <div class="strength-box"><strong>♙ Pontos Fortes</strong><div><span class="chip">História</span></div></div>
+          <div class="support-box"><strong>◷ Precisa de Apoio</strong><div><span class="chip">Português</span><span class="chip">Matemática</span></div></div>
+        </div>
+
+        <div class="recent-activities">
+          <h3>Atividades Recentes</h3>
+          <button class="activity-row" type="button" data-info-title="Revolução Francesa" data-info-text="João está estudando Revolução Francesa."><span class="activity-dot is-purple"></span><span><strong>História</strong><small>Em andamento: Revolução Francesa</small></span><time>1h atrás</time></button>
+          <button class="activity-row" type="button" data-info-title="Ecossistemas" data-info-text="João possui um exercício pendente sobre Ecossistemas."><span class="activity-dot is-red"></span><span><strong>Ciências</strong><small>Exercício pendente: Ecossistemas</small></span><time>1 dia atrás</time></button>
+        </div>
+
+        <div class="child-progress-footer"><span>Progresso Total</span><strong>62%</strong></div>
+        <div class="progress"><span style="width:62%"></span></div>
+      </section>
+
+      <section class="card panel reference-panel messages-panel">
+        <h2 class="panel-title">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.6 8.6 0 0 1-3-.6L4 20l1.6-4A7.5 7.5 0 1 1 20 11.5Z"/></svg>
+          Mensagens dos Professores
+        </h2>
+        <div class="messages-list">
+          <button class="message-card is-unread" type="button" data-info-title="Progresso da Maria em Matemática" data-info-text="Gostaria de parabenizá-los pelo excelente desempenho da Maria em Matemática."><span class="message-meta"><strong>Prof. Carlos Santos</strong><time>2 dias atrás</time></span><span class="message-title">Progresso da Maria em Matemática</span><span class="message-preview">Gostaria de parabenizá-los pelo excelente desempenho da Maria...</span></button>
+          <button class="message-card is-unread" type="button" data-info-title="Reforço em Português - João" data-info-text="Notei que o João está com dificuldade em análise sintática. Recomendo uma rotina curta de revisão."><span class="message-meta"><strong>Prof. Ana Costa</strong><time>3 dias atrás</time></span><span class="message-title">Reforço em Português - João</span><span class="message-preview">Notei que o João está com dificuldade em análise sintática...</span></button>
+          <button class="message-card" type="button" data-info-title="Reunião de Pais - Próxima Semana" data-info-text="Convidamos todos os responsáveis para a reunião da próxima semana."><span class="message-meta"><strong>Coordenação Pedagógica</strong><time>5 dias atrás</time></span><span class="message-title">Reunião de Pais - Próxima Semana</span><span class="message-preview">Convidamos todos os responsáveis para a reunião...</span></button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script defer src="js/data.js"></script>
+  <script defer src="js/theme.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/components.js"></script>
+  <script defer src="js/script.js"></script>
+</body>
+</html>
