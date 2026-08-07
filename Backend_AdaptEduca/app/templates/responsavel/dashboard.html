@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — AdaptEduca{% endblock %}
+
+{% block hero %}
+<div class="ae-hero" id="ae-hero">
+  <div style="max-width:1200px;margin:0 auto;">
+    <h1 id="hero-saudacao" class="ae-skeleton" style="width:260px;height:28px;display:inline-block;">
+      &nbsp;
+    </h1>
+    <p id="hero-sub" style="margin-top:.5rem;opacity:.9;">Acompanhe o progresso dos seus filhos</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="ae-page">
+
+  <!-- ── Mensagem de erro ── -->
+  <div id="ae-erro" class="ae-alert ae-alert--error" style="display:none;margin-bottom:1rem;">
+    ⚠️ <span id="ae-erro-msg"></span>
+  </div>
+
+  <!-- ── Stat cards ── -->
+  <div class="ae-stats" id="ae-stats">
+    {% for i in range(4) %}
+    <div class="ae-stat">
+      <div class="ae-stat__icon ae-skeleton" style="width:40px;height:40px;">&nbsp;</div>
+      <div>
+        <div class="ae-skeleton" style="width:60px;height:22px;margin-bottom:.3rem;">&nbsp;</div>
+        <div class="ae-skeleton" style="width:100px;height:14px;">&nbsp;</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ── Cards de alunos ── -->
+  <div id="ae-alunos"></div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const RESPONSAVEL_ID = {{ responsavel_id }};
+
+  async function carregarDashboard() {
+    try {
+      const res = await fetch(`/responsavel/api/${RESPONSAVEL_ID}/dashboard`);
+      const json = await res.json();
+
+      if (!json.sucesso) {
+        mostrarErro(json.mensagem);
+        return;
+      }
+
+      const d = json.dados;
+      renderStats(d);
+      renderAlunos(d.alunos);
+      document.getElementById('hero-saudacao').textContent =
+        `Olá, ${d.responsavel.nome}! 👨‍👩‍👧`;
+      document.getElementById('hero-saudacao').classList.remove('ae-skeleton');
+
+    } catch (err) {
+      mostrarErro('Não foi possível carregar os dados. Verifique se o servidor está ativo.');
+    }
+  }
+
+  function mostrarErro(msg) {
+    const el = document.getElementById('ae-erro');
+    document.getElementById('ae-erro-msg').textContent = msg;
+    el.style.display = 'flex';
+  }
+
+  function renderStats(d) {
+    const stats = [
+      { icon: '👥', cor: 'blue',   valor: d.totalFilhos,       label: 'Filhos Cadastrados' },
+      { icon: '📈', cor: 'green',  valor: `${d.progressoMedio}%`, label: 'Progresso Médio' },
+      { icon: '💬', cor: 'purple', valor: 0,                   label: 'Mensagens Não Lidas' },
+      { icon: '🔔', cor: 'red',    valor: 0,                   label: 'Alertas' },
+    ];
+
+    document.getElementById('ae-stats').innerHTML = stats.map(s => `
+      <div class="ae-stat">
+        <div class="ae-stat__icon ae-stat__icon--${s.cor}">${s.icon}</div>
+        <div>
+          <div class="ae-stat__value">${s.valor}</div>
+          <div class="ae-stat__label">${s.label}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderAlunos(alunos) {
+    if (!alunos.length) {
+      document.getElementById('ae-alunos').innerHTML =
+        '<p style="color:var(--color-muted);">Nenhum aluno vinculado a este responsável ainda.</p>';
+      return;
+    }
+
+    document.getElementById('ae-alunos').innerHTML = alunos.map(a => `
+      <div class="ae-card">
+        <!-- cabeçalho do aluno -->
+        <div class="ae-aluno-header">
+          <div class="ae-avatar">🧒</div>
+          <div class="ae-aluno-header__info">
+            <h2>${a.nome}</h2>
+            <p>Matrícula: ${a.matricula}${a.preferenciaAprendizagem ? ' · ' + a.preferenciaAprendizagem : ''}</p>
+          </div>
+          <div class="ae-aluno-header__progress">
+            <div class="ae-aluno-header__pct">${a.progresso}%</div>
+            <div class="ae-aluno-header__pct-label">Progresso Geral</div>
+          </div>
+        </div>
+
+        <!-- sub-stats -->
+        <div class="ae-sub-stats">
+          <div class="ae-sub-stat">
+            <div class="ae-sub-stat__label">Atividades Concluídas</div>
+            <div class="ae-sub-stat__value">${a.atividadesConcluidas}</div>
+          </div>
+          <div class="ae-sub-stat">
+            <div class="ae-sub-stat__label">Em Andamento</div>
+            <div class="ae-sub-stat__value">${a.emAndamento}</div>
+          </div>
+          ${a.proximaAula ? `
+          <div class="ae-sub-stat">
+            <div class="ae-sub-stat__label">🗓 Próxima Aula</div>
+            <div class="ae-sub-stat__value" style="font-size:.95rem;font-weight:600;">${a.proximaAula.titulo}</div>
+          </div>` : ''}
+        </div>
+
+        <!-- barra de progresso -->
+        <div class="ae-progress">
+          <div class="ae-progress__fill" style="width:${a.progresso}%"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  carregarDashboard();
+</script>
+{% endblock %}

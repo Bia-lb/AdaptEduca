@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}AdaptEduca{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/adapteduca.css') }}" />
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="ae-nav">
+    <a href="/" class="ae-nav__brand">
+      <span>⬜</span> AdaptEduca
+    </a>
+    <ul class="ae-nav__links">
+      <li><a href="#">Início</a></li>
+      <li><a href="#">Demo</a></li>
+      <li><a href="/api/alunos/" target="_blank">Aluno</a></li>
+      <li><a href="/api/professores/" target="_blank">Professor</a></li>
+      <li><a href="#" class="active">Responsável</a></li>
+      <li><a href="#">Preços</a></li>
+      <li><a href="#" class="ae-btn ae-btn--outline">Entrar</a></li>
+      <li><a href="#" class="ae-btn ae-btn--primary">Cadastrar</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero (opcional por página) ── -->
+  {% block hero %}{% endblock %}
+
+  <!-- ── Conteúdo principal ── -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
