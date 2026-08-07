@@ -2,11 +2,17 @@
 Nome do projeto: AdaptEduca
 
 Nome completo dos integrantes da equipe:
+
  Arthur Vinicius Gomes Campos
+ 
  Bianca Alves da Silva
+ 
  Carlos Henrique Simoes Neto
+ 
  Maria Clara de Aquino Souza
+ 
  Maria Edurada Oliveira Lavorato Andrada
+ 
  Sarah Elise Alcantara de Freitas
 
 
