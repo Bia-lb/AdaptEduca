@@ -1,52 +1,163 @@
-[README.md](https://github.com/user-attachments/files/30683016/README.md)
-Nome do projeto: AdaptEduca
+# AdaptEduca — Backend Flask
 
-Nome completo dos integrantes da equipe:
+Plataforma educacional adaptativa. Arquitetura em camadas:
+**Models → Repositories → Services → Controllers → Routes → app.py**
 
- Arthur Vinicius Gomes Campos
- 
- Bianca Alves da Silva
- 
- Carlos Henrique Simoes Neto
- 
- Maria Clara de Aquino Souza
- 
- Maria Edurada Oliveira Lavorato Andrada
- 
- Sarah Elise Alcantara de Freitas
+---
 
+## Pré-requisitos
 
-Stack utilizada no projeto, separando frontend, backend e banco de dados:
+- Python 3.10+
+- MySQL rodando localmente (usuário `root`, senha `mysqlalkmem`)
+- pip
 
--Frontend: HTML5, CSS e JavaScript, utilizados para desenvolver a interface do usuário.
--Backend: Python, responsável pela lógica de negócio, processamento das requisições e integração com o banco de dados.
--Banco de Dados: MySql, utilizado para armazenar e gerenciar os dados da aplicação.
+---
 
-Breve descrição do sistema:
-O Adapt Educa é uma plataforma web desenvolvida para auxiliar estudantes com dificuldades de aprendizagem, seus responsáveis e professores. O sistema utiliza inteligência artificial para adaptar os conteúdos enviados pelos professores de acordo com o perfil e as necessidades individuais de cada aluno, tornando o processo de ensino mais acessível, personalizado e eficiente.
+## Instalação
 
-Os professores podem cadastrar conteúdos e acompanhar o desempenho dos alunos, enquanto os responsáveis têm acesso à evolução da aprendizagem. Já os alunos recebem materiais adaptados em diferentes formatos, como resumos, mapas mentais, textos simplificados, flashcards e outros recursos que facilitam a compreensão do conteúdo.
+```bash
+# 1. Clone / descompacte o projeto e entre na pasta
+cd adapteduca
 
-O objetivo do Adapt Educa é promover uma educação mais inclusiva, oferecendo ferramentas que contribuam para o desenv
+# 2. Crie e ative o ambiente virtual
+python -m venv .venv
+source .venv/bin/activate        # Linux/Mac
+.venv\Scripts\activate           # Windows
 
-Instruções básicas para executar o projeto, quando aplicável:
-Instruções Básicas para Execução
-Requisitos
-MySQL 8.0 ou superior
-Servidor web compatível com a aplicação (quando implementada)
-Navegador atualizado (Google Chrome, Microsoft Edge ou Mozilla Firefox)
-Conexão com a internet (caso a aplicação utilize serviços de inteligência artificial)
-Configuração do Banco de Dados
-Instale o MySQL.
-Crie um banco de dados chamado adapt_educa.
-Execute o script SQL fornecido para criar todas as tabelas e seus relacionamentos.
-Verifique se todas as tabelas foram criadas corretamente antes de iniciar a aplicação.
-Execução da Aplicação
-Clone ou faça o download do projeto.
-Configure o arquivo de conexão com o banco de dados utilizando as credenciais do seu servidor MySQL.
-Inicie o servidor da aplicação conforme a tecnologia utilizada no desenvolvimento.
-Acesse o sistema pelo navegador utilizando o endereço configurado (por exemplo, http://localhost).
-Observações
-Certifique-se de que o banco de dados esteja em execução antes de iniciar a aplicação.
-Caso o sistema utilize serviços de inteligência artificial, configure as chaves de API necessárias antes da execução.
-Recomenda-se utilizar versões atualizadas das dependências do projeto para garantir compatibilidade e segurança.
+# 3. Instale as dependências
+pip install -r requirements.txt
+
+# 4. Crie o banco e popule dados de demonstração
+python scripts/seed.py
+
+# 5. Inicie o servidor
+python app.py
+```
+
+O servidor sobe em **http://localhost:5000**
+
+---
+
+## Dashboard do Responsável
+
+Acesse (após o seed):
+
+```
+http://localhost:5000/responsavel/1/dashboard
+```
+
+---
+
+## Rotas da API (CRUD completo)
+
+| Método | Endpoint                          | Descrição                     |
+|--------|-----------------------------------|-------------------------------|
+| GET    | /api/usuarios/                    | Listar usuários               |
+| POST   | /api/usuarios/                    | Criar usuário                 |
+| GET    | /api/usuarios/<id>                | Buscar usuário                |
+| PUT    | /api/usuarios/<id>                | Atualizar usuário             |
+| DELETE | /api/usuarios/<id>                | Remover usuário               |
+| GET    | /api/alunos/                      | Listar alunos                 |
+| POST   | /api/alunos/                      | Criar aluno                   |
+| GET    | /api/alunos/<id>                  | Buscar aluno                  |
+| PUT    | /api/alunos/<id>                  | Atualizar aluno               |
+| DELETE | /api/alunos/<id>                  | Remover aluno                 |
+| GET    | /api/turmas/                      | Listar turmas                 |
+| POST   | /api/turmas/                      | Criar turma                   |
+| GET    | /api/turmas/<id>                  | Buscar turma                  |
+| PUT    | /api/turmas/<id>                  | Atualizar turma               |
+| DELETE | /api/turmas/<id>                  | Remover turma                 |
+| GET    | /api/atividades/                  | Listar atividades             |
+| POST   | /api/atividades/                  | Criar atividade               |
+| GET    | /api/atividades/<id>              | Buscar atividade              |
+| PUT    | /api/atividades/<id>              | Atualizar atividade           |
+| DELETE | /api/atividades/<id>              | Remover atividade             |
+| GET    | /responsavel/api/                 | Listar responsáveis           |
+| POST   | /responsavel/api/                 | Criar responsável             |
+| GET    | /responsavel/api/<id>             | Buscar responsável            |
+| PUT    | /responsavel/api/<id>             | Atualizar responsável         |
+| DELETE | /responsavel/api/<id>             | Remover responsável           |
+| GET    | /responsavel/api/<id>/dashboard   | Dashboard JSON do responsável |
+| GET    | /responsavel/<id>/dashboard       | Dashboard HTML do responsável |
+
+### Rotas stub (501 Not Implemented — próxima iteração)
+- `/api/professores/`
+- `/api/conteudos/`
+- `/api/adaptacoes/`
+- `/api/feedbacks/`
+- `/api/relatorios/`
+
+---
+
+## Estrutura do Projeto
+
+```
+adapteduca/
+├── app.py                        ← Ponto de entrada
+├── .env                          ← Variáveis de ambiente
+├── requirements.txt
+├── README.md
+├── scripts/
+│   └── seed.py                   ← Cria banco + dados demo
+└── app/
+    ├── __init__.py               ← Factory (create_app)
+    ├── config.py                 ← Configurações por ambiente
+    ├── models/
+    │   ├── usuario.py            ← STI base
+    │   ├── aluno.py
+    │   ├── professor.py
+    │   ├── responsavel.py
+    │   ├── turma.py
+    │   ├── conteudo.py
+    │   ├── atividade.py
+    │   ├── adaptacao.py          ← stub
+    │   ├── feedback.py           ← stub
+    │   └── relatorio.py          ← stub
+    ├── repositories/
+    │   ├── base_repository.py    ← Genérico (Generic[T])
+    │   ├── usuario_repository.py
+    │   ├── aluno_repository.py
+    │   ├── turma_repository.py
+    │   ├── atividade_repository.py
+    │   └── responsavel_repository.py
+    ├── services/
+    │   ├── usuario_service.py
+    │   ├── aluno_service.py
+    │   ├── turma_service.py
+    │   ├── atividade_service.py
+    │   └── responsavel_service.py
+    ├── controllers/
+    │   ├── base_controller.py    ← Helpers JSON
+    │   ├── usuario_controller.py
+    │   ├── aluno_controller.py
+    │   ├── turma_controller.py
+    │   ├── atividade_controller.py
+    │   └── responsavel_controller.py
+    ├── routes/
+    │   ├── usuario_routes.py
+    │   ├── aluno_routes.py
+    │   ├── turma_routes.py
+    │   ├── atividade_routes.py
+    │   ├── responsavel_routes.py
+    │   └── stub_routes.py
+    ├── templates/
+    │   ├── base.html
+    │   └── responsavel/
+    │       └── dashboard.html
+    └── static/
+        └── css/
+            └── adapteduca.css
+```
+
+---
+
+## Decisões Técnicas
+
+| Decisão | Justificativa |
+|---------|---------------|
+| Single Table Inheritance (STI) para Usuario | O UML define herança direta; STI mantém uma FK simples e evita JOINs desnecessários para listagens |
+| BaseRepository genérico com Generic[T] | Elimina duplicação de CRUD básico (SRP + DRY) |
+| BaseController com helpers JSON | Padroniza todas as respostas: `{sucesso, mensagem, dados}` |
+| Stubs retornam 501 | Sinaliza que o endpoint existe no contrato mas não foi implementado, sem quebrar o cliente |
+| Senha em texto plano nesta fase | Projeto educacional/demo — adicionar `werkzeug.security` antes de produção |
+| Dashboard agregado no Service | Lógica de negócio (cálculo de progresso médio, filhos por turma) pertence ao Service, não ao Controller |
