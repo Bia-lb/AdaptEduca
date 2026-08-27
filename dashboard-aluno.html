@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel do aluno AdaptEduca com progresso e conteúdos personalizados.">
+  <title>Painel do Aluno | AdaptEduca</title>
+  <script>document.documentElement.dataset.theme=localStorage.getItem('adapteduca_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');</script>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="reference-dashboard student-reference" data-root="./" data-page="dashboard-aluno" data-private="true" data-role="aluno" data-reference-header="true">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="student-welcome" aria-labelledby="studentGreeting">
+      <div class="container">
+        <div class="welcome-top">
+          <div class="welcome-copy">
+            <h1 id="studentGreeting">Olá, <span data-user-first>Maria</span>! <span aria-hidden="true">👋</span></h1>
+            <p>Pronta para continuar aprendendo hoje?</p>
+
+            <div class="learning-method">
+              <div class="method-label">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 4.5A3.5 3.5 0 0 0 6 8v1.2A3 3 0 0 0 4.5 14a3.5 3.5 0 0 0 5 3.2M14.5 4.5A3.5 3.5 0 0 1 18 8v1.2a3 3 0 0 1 1.5 4.8 3.5 3.5 0 0 1-5 3.2M9.5 4.5v15M14.5 4.5v15M9.5 8H8M14.5 8H16M9.5 13H8M14.5 13H16M9.5 17h-1M14.5 17h1"/></svg>
+                <strong>Seu método de aprendizagem preferido:</strong>
+              </div>
+              <div class="method-chips">
+                <span>Visual (Vídeos)</span>
+                <span>Mapas Mentais</span>
+              </div>
+            </div>
+          </div>
+
+          <a class="ai-adapt-btn" href="adaptacao-conteudo.html">
+            <svg class="ui-icon ui-icon-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 .8 3.2A5.4 5.4 0 0 0 16.8 10l3.2.8-3.2.8a5.4 5.4 0 0 0-4 3.8L12 19l-.8-3.2a5.4 5.4 0 0 0-4-4L4 11l3.2-.8a5.4 5.4 0 0 0 4-4L12 3ZM19 3l.4 1.4L21 5l-1.6.5L19 7l-.5-1.5L17 5l1.5-.6L19 3Z"/></svg>
+            <span>Adaptar Conteúdo com IA</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container dashboard-shell student-dashboard-shell">
+      <label class="card search-bar" for="studentSearch">
+        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <input id="studentSearch" class="student-search-input" type="search" placeholder="Buscar conteúdos..." autocomplete="off" data-filter-list="#courseList .course-card">
+      </label>
+
+      <section class="card progress-summary" aria-labelledby="progressTitle">
+        <h2 id="progressTitle">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"/></svg>
+          Seu Progresso
+        </h2>
+        <div class="progress-boxes">
+          <article class="progress-box is-blue"><strong>12</strong><span>Concluídos</span></article>
+          <article class="progress-box is-purple"><strong>8</strong><span>Em Andamento</span></article>
+          <article class="progress-box is-neutral"><strong>5</strong><span>Para Iniciar</span></article>
+          <article class="progress-box is-green"><strong>75%</strong><span>Taxa de Conclusão</span></article>
+        </div>
+      </section>
+
+      <nav class="tabs subject-tabs" id="subjectTabs" aria-label="Disciplinas">
+        <button class="tab-btn active" type="button" data-subject="Matemática"><span aria-hidden="true">🔢</span> Matemática</button>
+        <button class="tab-btn" type="button" data-subject="Português"><span aria-hidden="true">📚</span> Português</button>
+        <button class="tab-btn" type="button" data-subject="História"><span aria-hidden="true">🏛️</span> História</button>
+        <button class="tab-btn" type="button" data-subject="Ciências"><span aria-hidden="true">🔬</span> Ciências</button>
+      </nav>
+
+      <section class="course-list" id="courseList" aria-live="polite"></section>
+
+      <section class="student-lower-grid" aria-label="Recursos adicionais do aluno">
+        <article class="card panel">
+          <h2 class="panel-title">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 .8 3.2A5.4 5.4 0 0 0 16.8 10l3.2.8-3.2.8a5.4 5.4 0 0 0-4 3.8L12 19l-.8-3.2a5.4 5.4 0 0 0-4-4L4 11l3.2-.8a5.4 5.4 0 0 0 4-4L12 3Z"/></svg>
+            Recomendações da IA
+          </h2>
+          <div class="recommendation-list">
+            <button class="list-item list-item-button" type="button" data-info-title="Revisar Geometria Espacial" data-info-text="Nossa recomendação é revisar o mapa mental por 8 minutos e depois responder três exercícios rápidos."><strong>Revise Geometria Espacial</strong><span>Um mapa mental de 8 minutos pode ajudar a fixar os conceitos.</span></button>
+            <button class="list-item list-item-button" type="button" data-info-title="Meta de hoje" data-info-text="Conclua um exercício de Matemática para manter sua sequência de estudos."><strong>Meta de hoje</strong><span>Conclua um exercício de Matemática para manter sua sequência.</span></button>
+          </div>
+        </article>
+        <article class="card panel">
+          <h2 class="panel-title">🔔 Notificações</h2>
+          <div class="notification-list">
+            <button class="list-item list-item-button" type="button" data-info-title="Novo conteúdo" data-info-text="O professor Carlos publicou o conteúdo Funções Trigonométricas."><strong>Novo conteúdo</strong><span>Prof. Carlos publicou Trigonometria.</span></button>
+            <button class="list-item list-item-button" type="button" data-info-title="Sequência de estudos" data-info-text="Você estudou por quatro dias seguidos. Continue assim!"><strong>Sequência de estudos</strong><span>Você estudou por 4 dias seguidos.</span></button>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <script defer src="js/data.js"></script>
+  <script defer src="js/theme.js"></script>
+  <script defer src="js/api.js"></script><script defer src="js/auth.js"></script>
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/components.js"></script>
+  <script defer src="js/script.js"></script>
+</body>
+</html>
