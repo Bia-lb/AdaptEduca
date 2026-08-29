@@ -9,7 +9,7 @@
     return safe;
   }
   async function login(email,password){
-    const response=await window.AdaptEducaAPI.login({email,password});
+    const response=await window.AdaptEducaAPI.login({email,senha:password});
     return setSession(response.dados);
   }
   async function register(data){
