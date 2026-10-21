@@ -11,7 +11,7 @@ from app import create_app, db
 from app.models import Aluno, Professor, Responsavel, Turma, Atividade
 
 # ── Criar banco se não existir ─────────────────────────────────────────────
-conn = pymysql.connect(host="localhost", user="root", password="mysqlalkmem")
+conn = pymysql.connect(host="localhost", user="root", password="")
 with conn.cursor() as cur:
     cur.execute("CREATE DATABASE IF NOT EXISTS adapteduca CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")
 conn.commit()
