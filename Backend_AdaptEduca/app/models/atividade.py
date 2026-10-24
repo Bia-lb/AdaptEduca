@@ -1,3 +1,5 @@
+import json
+
 from app import db
 
 
@@ -14,7 +16,11 @@ class Atividade(db.Model):
         default="Pendente",
     )
     turma_id = db.Column(db.Integer, db.ForeignKey("turma.id"), nullable=False)
+    questoes = db.Column(db.Text)  # JSON: lista de enunciados
+    etapas = db.Column(db.Text)    # JSON: [{"titulo","instrucao"}]
 
+    respostas = db.relationship("Resposta", backref="atividade", lazy=True,
+                                cascade="all, delete-orphan")
     feedbacks = db.relationship("Feedback", backref="atividade", lazy=True)
 
 
@@ -69,7 +75,23 @@ class Atividade(db.Model):
             "prazo": self.prazo.isoformat() if self.prazo else None,
             "status": self.status,
             "turma_id": self.turma_id,
+            "questoes": self.lista_questoes(),
+            "etapas": self.lista_etapas(),
         }
+
+    def lista_etapas(self) -> list:
+        try:
+            dados = json.loads(self.etapas) if self.etapas else []
+        except ValueError:
+            return []
+        return dados if isinstance(dados, list) else []
+
+    def lista_questoes(self) -> list:
+        try:
+            dados = json.loads(self.questoes) if self.questoes else []
+        except ValueError:
+            return []
+        return dados if isinstance(dados, list) else []
 
     def __repr__(self) -> str:
         return f"<Atividade id={self.id} titulo={self.titulo!r}>"

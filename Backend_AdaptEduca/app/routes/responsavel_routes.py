@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from app.controllers.responsavel_controller import ResponsavelController
+from app.security import requer_auth
 
 responsavel_bp = Blueprint("responsavel", __name__, url_prefix="/responsavel")
 _ctrl = ResponsavelController()
@@ -15,31 +16,37 @@ def dashboard_html(id: int):
 # ── API REST ─────────────────────────────────────────────────────────────────
 
 @responsavel_bp.get("/api/")
+@requer_auth("Professor")
 def listar():
     return _ctrl.listar()
 
 
 @responsavel_bp.get("/api/<int:id>")
+@requer_auth("Professor", proprio=True)
 def buscar(id: int):
     return _ctrl.buscar(id)
 
 
 @responsavel_bp.post("/api/")
+@requer_auth("Professor")
 def criar():
     return _ctrl.criar()
 
 
 @responsavel_bp.put("/api/<int:id>")
+@requer_auth(proprio=True)
 def atualizar(id: int):
     return _ctrl.atualizar(id)
 
 
 @responsavel_bp.delete("/api/<int:id>")
+@requer_auth(proprio=True)
 def deletar(id: int):
     return _ctrl.deletar(id)
 
 
 @responsavel_bp.get("/api/<int:id>/dashboard")
+@requer_auth(proprio=True)
 def dashboard_json(id: int):
     """Endpoint JSON que alimenta a página HTML via fetch."""
     return _ctrl.dashboard(id)

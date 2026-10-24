@@ -1,4 +1,4 @@
-from flask import request
+from flask import g, request
 from app.services.aluno_service import AlunoService
 from .base_controller import BaseController
 
@@ -43,3 +43,22 @@ class AlunoController(BaseController):
             return self.sucesso(mensagem="Aluno removido.")
         except LookupError as exc:
             return self.erro(str(exc), 404)
+
+    # ── perfil do próprio aluno (RF04) ──────────────────────────────────────
+    def meu_perfil(self):
+        aluno = self._service.buscar(g.usuario_id)
+        if not aluno:
+            return self.erro("Aluno não encontrado.", 404)
+        dados = aluno.to_dict()
+        dados["questionario"] = aluno.respostas_questionario()
+        return self.sucesso(dados)
+
+    def salvar_questionario(self):
+        dados = request.get_json(silent=True) or {}
+        try:
+            aluno = self._service.salvar_questionario(g.usuario_id, dados.get("respostas"))
+        except LookupError as exc:
+            return self.erro(str(exc), 404)
+        except ValueError as exc:
+            return self.erro(str(exc), 422)
+        return self.sucesso(aluno.to_dict(), "Preferências de aprendizagem salvas.")

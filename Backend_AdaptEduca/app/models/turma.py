@@ -79,6 +79,7 @@ class Turma(db.Model):
             "nome": self.nome,
             "descricao": self.descricao,
             "professor_id": self.professor_id,
+            "totalAlunos": len(self.alunos),
         }
 
     def __repr__(self) -> str:

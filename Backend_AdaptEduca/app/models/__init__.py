@@ -9,9 +9,12 @@ from .atividade import Atividade
 from .adaptacao import Adaptacao
 from .feedback import Feedback
 from .relatorio import Relatorio
+from .resposta import Resposta
+from .sessao_estudo import SessaoEstudo
+from .ia_uso import IAUso
 
 __all__ = [
     "Usuario", "Aluno", "Professor", "Responsavel",
     "Turma", "Conteudo", "Atividade",
-    "Adaptacao", "Feedback", "Relatorio",
+    "Adaptacao", "Feedback", "Relatorio", "Resposta", "SessaoEstudo", "IAUso",
 ]

@@ -9,6 +9,8 @@ db = SQLAlchemy()
 def create_app(env: str = "development") -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder="static")
     app.config.from_object(config[env])
+    if hasattr(config[env], "validar"):
+        config[env].validar()
 
     # Extensões
     db.init_app(app)
@@ -17,7 +19,8 @@ def create_app(env: str = "development") -> Flask:
     # consuma a API REST.
     try:
         from flask_cors import CORS
-        CORS(app, resources={r"/api/*": {"origins": "*"}})
+        CORS(app, resources={r"/api/*": {"origins": "*"}},
+             allow_headers=["Content-Type", "Authorization"])
     except ImportError:
         pass
 
@@ -35,7 +38,7 @@ def create_app(env: str = "development") -> Flask:
         # Importa modelos para que o SQLAlchemy os conheça
         from .models import usuario, aluno, professor, responsavel  # noqa: F401
         from .models import turma, conteudo, atividade              # noqa: F401
-        from .models import adaptacao, feedback, relatorio           # noqa: F401
+        from .models import adaptacao, feedback, relatorio, resposta, sessao_estudo, ia_uso  # noqa: F401
 
         # O schema do banco é criado pelo arquivo databasemodel.sql.
         # O SQLAlchemy é usado como camada ORM das Models, sem criar/alterar
@@ -55,6 +58,16 @@ def create_app(env: str = "development") -> Flask:
         app.register_blueprint(turma_bp)
         app.register_blueprint(atividade_bp)
         app.register_blueprint(responsavel_bp)
+
+        from .routes.conteudo_routes import conteudo_bp
+        from .routes.estudo_routes import estudo_bp
+        from .routes.feedback_routes import feedback_bp
+        from .routes.progresso_routes import progresso_bp
+        for bp in (conteudo_bp, estudo_bp, feedback_bp, progresso_bp):
+            app.register_blueprint(bp)
+
+        from .routes.ia_routes import ia_bp
+        app.register_blueprint(ia_bp)
 
         # Rotas stub (entidades futuras)
         from .routes.stub_routes import stub_bp

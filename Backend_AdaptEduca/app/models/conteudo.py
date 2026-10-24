@@ -1,3 +1,5 @@
+from sqlalchemy.dialects import mysql
+
 from app import db
 
 
@@ -7,7 +9,9 @@ class Conteudo(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     titulo = db.Column(db.String(120), nullable=False)
     tipo = db.Column(db.Enum("Texto", "PDF", "Video", "Link"), nullable=False)
-    arquivo = db.Column(db.String(255))
+    arquivo = db.Column(db.String(255))      # link, ou nome do PDF guardado
+    arquivoOriginal = db.Column(db.String(255))
+    texto = db.Column(db.Text().with_variant(mysql.LONGTEXT(), "mysql"))  # texto-base usado nas adaptações
     dataPostagem = db.Column(db.Date)
     turma_id = db.Column(db.Integer, db.ForeignKey("turma.id"), nullable=False)
 
@@ -62,12 +66,19 @@ class Conteudo(db.Model):
             "id": self.id,
             "titulo": self.titulo,
             "tipo": self.tipo,
-            "arquivo": self.arquivo,
+            "arquivo": self.arquivo if self.tipo == "Link" else None,
+            "arquivoOriginal": self.arquivoOriginal,
+            "temPdf": self.tipo == "PDF" and bool(self.arquivo),
             "dataPostagem": (
                 self.dataPostagem.isoformat() if self.dataPostagem else None
             ),
             "turma_id": self.turma_id,
         }
+
+    def to_dict_completo(self) -> dict:
+        dados = self.to_dict()
+        dados["texto"] = self.texto
+        return dados
 
     def __repr__(self) -> str:
         return f"<Conteudo id={self.id} titulo={self.titulo!r}>"

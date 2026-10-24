@@ -1,3 +1,5 @@
+import json
+
 from app import db
 from .usuario import Usuario
 
@@ -10,6 +12,8 @@ class Aluno(Usuario):
     preferenciaAprendizagem = db.Column(db.String(80))
     progresso = db.Column(db.Float, default=0.0)
     dataNascimento = db.Column(db.Date)
+    questionario = db.Column(db.Text)
+    questionarioConcluido = db.Column(db.Boolean, nullable=False, default=False)
 
     relatorios = db.relationship("Relatorio", backref="aluno", lazy=True)
 
@@ -68,8 +72,21 @@ class Aluno(Usuario):
             "dataNascimento": (
                 self.dataNascimento.isoformat() if self.dataNascimento else None
             ),
+            "questionarioConcluido": bool(self.questionarioConcluido),
+            "learningMethods": self.formatos_preferidos(),
         })
         return base
+
+    def respostas_questionario(self) -> dict:
+        """Respostas completas do questionário (dado sensível: só o próprio aluno)."""
+        try:
+            return json.loads(self.questionario) if self.questionario else {}
+        except ValueError:
+            return {}
+
+    def formatos_preferidos(self) -> list:
+        formatos = self.respostas_questionario().get("formats", [])
+        return formatos if isinstance(formatos, list) else []
 
     def __repr__(self) -> str:
         return f"<Aluno id={self.id} matricula={self.matricula!r}>"

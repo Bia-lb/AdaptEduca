@@ -8,6 +8,12 @@ responsavel_turma = db.Table(
     db.Column("turma_id", db.Integer, db.ForeignKey("turma.id"), primary_key=True),
 )
 
+responsavel_aluno = db.Table(
+    "responsavel_aluno",
+    db.Column("responsavel_id", db.Integer, db.ForeignKey("responsavel.id"), primary_key=True),
+    db.Column("aluno_id", db.Integer, db.ForeignKey("aluno.id"), primary_key=True),
+)
+
 
 class Responsavel(Usuario):
     __tablename__ = "responsavel"
@@ -15,6 +21,8 @@ class Responsavel(Usuario):
     id = db.Column(db.Integer, db.ForeignKey("usuario.id"), primary_key=True)
     parentesco = db.Column(db.String(40))
     telefone = db.Column(db.String(20))
+
+    filhos = db.relationship("Aluno", secondary=responsavel_aluno, lazy=True)
 
     turmas = db.relationship(
         "Turma",

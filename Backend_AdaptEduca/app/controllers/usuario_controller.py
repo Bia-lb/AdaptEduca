@@ -82,6 +82,8 @@ class UsuarioController(BaseController):
                 str(exc),
                 404
             )
+        except ValueError as exc:
+            return self.erro(str(exc), 409)
 
     def deletar(self, id: int):
 

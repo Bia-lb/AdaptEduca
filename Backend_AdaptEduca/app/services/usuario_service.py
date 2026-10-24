@@ -19,16 +19,9 @@ class UsuarioService:
         return self.repo.buscar_id_por_email(email) is None
 
     def criar(self, dados: dict) -> Usuario:
-
-        if self.repo.buscar_id_por_email(dados["email"]) is not None:
-            raise ValueError("E-mail já cadastrado.")
-
-        return Usuario.criar({
-            "nome": dados["nome"],
-            "email": dados["email"],
-            "senha": dados["senha"],
-            "tipoPerfil": dados["tipoPerfil"]
-        })
+        # Um Usuario "solto" não tem a linha de aluno/professor/responsável e
+        # quebraria as consultas. O cadastro correto é /api/auth/register.
+        raise ValueError("Use /api/auth/register para criar contas.")
 
     def atualizar(self, id: int, dados: dict) -> Usuario:
 
@@ -39,9 +32,12 @@ class UsuarioService:
                 f"Usuário {id} não encontrado."
             )
 
+        novo_email = dados.get("email", usuario.email)
+        if novo_email.lower() != usuario.email.lower() and not self.email_disponivel(novo_email):
+            raise ValueError("E-mail já cadastrado.")
         return usuario.atualizar(
             nome=dados.get("nome", usuario.nome),
-            email=dados.get("email", usuario.email),
+            email=novo_email,
             senha=dados.get("senha", usuario.senha)
         )
 

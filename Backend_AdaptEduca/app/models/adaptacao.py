@@ -1,3 +1,5 @@
+from sqlalchemy.dialects import mysql
+
 from app import db
 
 
@@ -6,10 +8,11 @@ class Adaptacao(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     modo = db.Column(
-        db.Enum("Texto simplificado", "Audio", "Video", "Mapa mental", "Resumo"),
+        db.Enum("Texto simplificado", "Audio", "Video", "Mapa mental", "Resumo", "TDAH", "TEA", "Flashcards"),
         nullable=False,
     )
     resumo = db.Column(db.Text)
+    resultado = db.Column(db.Text().with_variant(mysql.LONGTEXT(), "mysql"))  # JSON gerado pelo motor de adaptação
     audio = db.Column(db.Boolean, default=False)
     mapaMental = db.Column(db.Boolean, default=False)
     conteudo_id = db.Column(db.Integer, db.ForeignKey("conteudo.id"), nullable=False)

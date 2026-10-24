@@ -1,4 +1,11 @@
+import hmac
+
+from sqlalchemy.orm import validates
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from app import db
+
+_PREFIXOS_HASH = ("pbkdf2:", "scrypt:")
 
 
 class Usuario(db.Model):
@@ -30,6 +37,27 @@ class Usuario(db.Model):
         db.Enum("Aluno", "Professor", "Responsavel"),
         nullable=False
     )
+
+    # Permite que Usuario.query devolva Aluno/Professor/Responsavel já tipados
+    # (sem isso, o identity map devolve a instância genérica Usuario).
+    __mapper_args__ = {"polymorphic_on": tipoPerfil}
+
+    @validates("senha")
+    def _hash_senha(self, _chave, valor):
+        """Garante que a senha seja sempre gravada como hash."""
+        if valor and not valor.startswith(_PREFIXOS_HASH):
+            return generate_password_hash(valor, method="pbkdf2:sha256")
+        return valor
+
+    def verificar_senha(self, senha: str) -> bool:
+        """Confere a senha. Senhas legadas em texto puro são migradas para hash."""
+        if self.senha.startswith(_PREFIXOS_HASH):
+            return check_password_hash(self.senha, senha)
+        if hmac.compare_digest(self.senha.encode(), senha.encode()):
+            self.senha = senha  # o validator converte em hash
+            db.session.commit()
+            return True
+        return False
 
     @classmethod
     def listar(cls):

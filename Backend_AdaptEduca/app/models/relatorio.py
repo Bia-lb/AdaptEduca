@@ -1,3 +1,5 @@
+from sqlalchemy.dialects import mysql
+
 from app import db
 
 
@@ -9,6 +11,8 @@ class Relatorio(db.Model):
     tempoEstudo = db.Column(db.Float)
     materiasDificeis = db.Column(db.String(255))
     periodo = db.Column(db.String(40))
+    geradoEm = db.Column(db.DateTime)
+    dados = db.Column(db.Text().with_variant(mysql.LONGTEXT(), "mysql"))  # JSON: retrato completo no momento da geração
     aluno_id = db.Column(db.Integer, db.ForeignKey("aluno.id"), nullable=False)
 
 
@@ -63,4 +67,5 @@ class Relatorio(db.Model):
             "materiasDificeis": self.materiasDificeis,
             "periodo": self.periodo,
             "aluno_id": self.aluno_id,
+            "geradoEm": self.geradoEm.isoformat() if self.geradoEm else None,
         }

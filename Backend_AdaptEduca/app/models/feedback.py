@@ -14,6 +14,7 @@ class Feedback(db.Model):
     atividade_id = db.Column(
         db.Integer, db.ForeignKey("atividade.id"), nullable=False
     )
+    aluno_id = db.Column(db.Integer, db.ForeignKey("aluno.id"), nullable=True)
 
 
     @classmethod
@@ -66,4 +67,5 @@ class Feedback(db.Model):
             "data": self.data.isoformat() if self.data else None,
             "tipo": self.tipo,
             "atividade_id": self.atividade_id,
+            "aluno_id": self.aluno_id,
         }
