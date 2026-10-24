@@ -4,33 +4,37 @@
 
   function session(){try{return JSON.parse(localStorage.getItem(SESSION)||'null')}catch{return null}}
   function setSession(user){
-    const safe={id:user.id,name:user.nome,email:user.email,role:(user.tipoPerfil||'').toLowerCase(),questionnaireCompleted:!!user.questionnaireCompleted,learningMethods:user.learningMethods||[]};
+    const safe={id:user.id,name:user.nome,email:user.email,role:(user.tipoPerfil||'').toLowerCase(),questionnaireCompleted:!!user.questionarioConcluido,learningMethods:user.learningMethods||[]};
     try{localStorage.setItem(SESSION,JSON.stringify(safe))}catch{}
     return safe;
   }
   async function login(email,password){
     const response=await window.AdaptEducaAPI.login({email,senha:password});
+    window.AdaptEducaAPI.setToken(response.token);
     return setSession(response.dados);
   }
   async function register(data){
     const response=await window.AdaptEducaAPI.register({
       nome:data.name,email:data.email,senha:data.password,tipoPerfil:data.role,
-      matricula:data.matricula || undefined
+      matricula:data.matricula || undefined, disciplina:data.disciplina || undefined
     });
+    window.AdaptEducaAPI.setToken(response.token);
     return setSession(response.dados);
   }
-  function logout(){try{localStorage.removeItem(SESSION)}catch{}location.href=root()+'login.html'}
+  function logout(){try{localStorage.removeItem(SESSION);localStorage.removeItem(QUESTIONNAIRE)}catch{}window.AdaptEducaAPI?.setToken(null);location.href=root()+'login.html'}
   function dashboardPath(role){return root()+'dashboard-'+role+'.html'}
   function goToDashboard(user=session()){
     if(!user){location.href=root()+'login.html';return}
     if(user.role==='aluno'&&!user.questionnaireCompleted){location.href=root()+'questionario-aluno.html';return}
     location.href=dashboardPath(user.role)
   }
-  function completeQuestionnaire(answers){
-    try{localStorage.setItem(QUESTIONNAIRE,JSON.stringify(answers))}catch{}
-    const s=session(); if(!s)return;
-    s.questionnaireCompleted=true;s.learningMethods=answers.formats||[];
+  // RF04: grava o questionário no banco; só marca como concluído se a API aceitar.
+  async function completeQuestionnaire(answers){
+    const response=await window.AdaptEducaAPI.put('/alunos/me/questionario',{respostas:answers});
+    const s=session(); if(!s)return response;
+    s.questionnaireCompleted=true;s.learningMethods=response.dados?.learningMethods||answers.formats||[];
     try{localStorage.setItem(SESSION,JSON.stringify(s))}catch{}
+    return response;
   }
   function guard(){
     const body=document.body;if(!body||body.dataset.private!=='true')return;
@@ -66,8 +70,9 @@
       e.preventDefault();const data=new FormData(registerForm);
       if(!data.get('terms')){window.showToast?.('Você precisa aceitar os Termos de Uso.','error');return}
       if(data.get('password')!==data.get('confirmPassword')){window.showToast?.('As senhas não coincidem.','error');return}
+      if((data.get('password')||'').length<8){window.showToast?.('A senha deve ter ao menos 8 caracteres.','error');return}
       const roleMap={aluno:'Aluno',professor:'Professor',responsavel:'Responsavel'};
-      try{const user=await register({name:data.get('name'),email:data.get('email'),password:data.get('password'),role:roleMap[data.get('role')]||'Aluno'});window.showToast?.('Conta criada com sucesso!','success');setTimeout(()=>goToDashboard(user),350)}
+      try{const user=await register({name:data.get('name'),email:data.get('email'),password:data.get('password'),role:roleMap[data.get('role')]||'Aluno',matricula:data.get('matricula'),disciplina:data.get('role')==='professor'?(data.get('disciplina')||'').trim():undefined});window.showToast?.('Conta criada com sucesso!','success');setTimeout(()=>goToDashboard(user),350)}
       catch(err){window.showToast?.(err.message,'error')}
     });
   });

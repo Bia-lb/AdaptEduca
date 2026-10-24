@@ -1,0 +1,134 @@
+
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="AdaptEduca — educação personalizada e acessível."
+    >
+
+    <title>Recuperar senha | AdaptEduca</title>
+
+    <!-- Configuração automática do tema -->
+    <script>
+        document.documentElement.dataset.theme =
+            localStorage.getItem('adapteduca_theme') ||
+            (matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light');
+    </script>
+
+    <!-- Arquivos CSS -->
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="./css/app.css">
+</head>
+
+<body data-root="./" data-page="esqueci-senha">
+
+    <!-- Conteúdo principal -->
+    <main class="auth-page">
+
+        <!-- Card de recuperação de senha -->
+        <section class="card auth-card">
+
+            <!-- Ícone -->
+            <div class="auth-icon">
+                ✉
+            </div>
+
+            <!-- Título e descrição -->
+            <h1>Esqueceu a senha?</h1>
+
+            <p class="auth-sub">
+                Informe seu e-mail e enviaremos um link
+                para criar uma nova senha.
+            </p>
+
+            <!-- Formulário de recuperação -->
+            <form
+                class="auth-form"
+                id="forgotForm"
+            >
+
+                <!-- Campo de e-mail -->
+                <div class="input-group">
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
+                    <input
+                        class="input"
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="seu@email.com"
+                        required
+                    >
+
+                </div>
+
+                <!-- Botão de envio -->
+                <button
+                    class="btn btn-primary btn-block"
+                    type="submit"
+                >
+                    Enviar link
+                </button>
+
+                <!-- Mensagem de retorno -->
+                <p
+                    class="small muted"
+                    id="forgotMsg"
+                    role="status"
+                ></p>
+
+            </form>
+
+            <!-- Link para retornar ao login -->
+            <p class="auth-footer">
+
+                <a
+                    href="login.html"
+                    style="color:var(--primary);font-weight:700"
+                >
+                    ← Voltar ao login
+                </a>
+
+            </p>
+
+        </section>
+
+        <!-- Botão de alternância do tema -->
+        <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            style="position:fixed;top:14px;right:14px"
+        >
+            ☾
+        </button>
+
+    </main>
+
+    <!-- Arquivos JavaScript -->
+    <script defer src="./js/data.js"></script>
+    <script defer src="./js/theme.js"></script>
+    <script defer src="./js/api.js"></script>
+    <script defer src="./js/auth.js"></script>
+    <script defer src="./js/navigation.js"></script>
+    <script defer src="./js/components.js"></script>
+    <script defer src="./js/ui.js"></script>
+    <script defer src="./js/script.js"></script>
+    <script defer src="./js/pages-auth.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,515 @@
+
+/* ========================================
+   COMPONENTES DAS TELAS CONECTADAS À API
+======================================== */
+
+.ui-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.ui-stat {
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.ui-stat strong {
+    display: block;
+    font-size: 1.7rem;
+    line-height: 1.15;
+}
+
+.ui-stat small {
+    color: var(--text-2);
+}
+
+.ui-stat.tone-green strong {
+    color: var(--green);
+}
+
+.ui-stat.tone-red strong {
+    color: var(--red);
+}
+
+.ui-stat.tone-blue strong {
+    color: var(--primary);
+}
+
+.ui-stat.tone-purple strong {
+    color: var(--purple);
+}
+
+/* ========================================
+   SEÇÕES E ORGANIZAÇÃO
+======================================== */
+
+.ui-section {
+    margin-top: 26px;
+}
+
+.ui-section > h2 {
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+}
+
+.ui-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.ui-list {
+    display: grid;
+    gap: 12px;
+}
+
+/* ========================================
+   BARRAS DE PROGRESSO
+======================================== */
+
+.ui-bar {
+    height: 9px;
+    border-radius: 99px;
+    background: var(--surface-2);
+    overflow: hidden;
+}
+
+.ui-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: var(--gradient);
+}
+
+.ui-bar.warn > span {
+    background: var(--warning);
+}
+
+.ui-bar.bad > span {
+    background: var(--red);
+}
+
+.ui-bar.good > span {
+    background: var(--green);
+}
+
+/* ========================================
+   INDICADORES (PILLS)
+======================================== */
+
+.ui-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: var(--surface-blue);
+    color: var(--primary);
+}
+
+.ui-pill.good {
+    background: var(--surface-green);
+    color: var(--green);
+}
+
+.ui-pill.bad {
+    background: var(--surface-red);
+    color: var(--red);
+}
+
+.ui-pill.warn {
+    background: #fff4d6;
+    color: #8a6100;
+}
+
+/* ========================================
+   GRÁFICOS DE BARRAS
+======================================== */
+
+.ui-bars {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    height: 150px;
+    padding-top: 8px;
+}
+
+.ui-bars > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 4px;
+    min-width: 0;
+}
+
+.ui-bars .col {
+    width: 100%;
+    max-width: 46px;
+    border-radius: 8px 8px 0 0;
+    background: var(--gradient);
+    min-height: 3px;
+}
+
+.ui-bars small {
+    font-size: 0.7rem;
+    color: var(--text-2);
+    white-space: nowrap;
+}
+
+.ui-bars b {
+    font-size: 0.75rem;
+}
+
+/* ========================================
+   TABELAS
+======================================== */
+
+.ui-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ui-table th,
+.ui-table td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+.ui-table th {
+    color: var(--text-2);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.ui-table-wrap {
+    overflow-x: auto;
+}
+
+/* ========================================
+   ESTADOS VAZIOS
+======================================== */
+
+.ui-empty {
+    padding: 26px;
+    text-align: center;
+    color: var(--text-2);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+}
+
+/* ========================================
+   CAMPOS DE FORMULÁRIO
+======================================== */
+
+.ui-field {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+
+.ui-field label {
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+/* ========================================
+   ABAS DE NAVEGAÇÃO
+======================================== */
+
+.ui-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.ui-tabs button {
+    padding: 8px 14px;
+    border-radius: 99px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.ui-tabs button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+/* ========================================
+   AÇÕES E BOTÕES
+======================================== */
+
+.ui-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+/* ========================================
+   ADAPTAÇÕES
+======================================== */
+
+/* Caixa de conteúdo */
+
+.ad-box {
+    line-height: 1.8;
+}
+
+.ad-box p + p {
+    margin-top: 12px;
+}
+
+/* Listas */
+
+.ad-list {
+    display: grid;
+    gap: 10px;
+    margin: 10px 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ad-list li {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+}
+
+/* Palavras-chave */
+
+.ad-key {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+/* Blocos de adaptação */
+
+.ad-block {
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 14px;
+    background: var(--surface);
+}
+
+.ad-block h4 {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.ad-block mark {
+    background: #fff0a8;
+    color: inherit;
+    padding: 0 3px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+/* Área de verificação */
+
+.ad-check {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-blue);
+    font-size: 0.9rem;
+}
+
+/* TEA */
+
+.ad-tea ol {
+    padding-left: 22px;
+    display: grid;
+    gap: 12px;
+}
+
+.ad-tea li {
+    padding-left: 4px;
+    font-size: 1.05rem;
+}
+
+/* ========================================
+   MAPA MENTAL
+======================================== */
+
+.ad-mm {
+    display: grid;
+    gap: 16px;
+}
+
+.ad-mm-center {
+    justify-self: center;
+    padding: 14px 26px;
+    border-radius: 99px;
+    background: var(--gradient);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.ad-mm-branches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+}
+
+.ad-mm-branch {
+    border: 2px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 12px;
+    position: relative;
+    background: var(--surface);
+}
+
+.ad-mm-branch > strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--primary);
+}
+
+.ad-mm-branch ul {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   ÁUDIO
+======================================== */
+
+.ad-audio {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+}
+
+.ad-audio .seg {
+    margin-top: 14px;
+    display: grid;
+    gap: 8px;
+}
+
+.ad-audio .seg p {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    opacity: 0.65;
+}
+
+.ad-audio .seg p.on {
+    opacity: 1;
+    background: var(--surface-blue);
+    font-weight: 600;
+}
+
+/* ========================================
+   FLASHCARDS
+======================================== */
+
+.ad-flip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+}
+
+.ad-card {
+    min-height: 150px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+}
+
+.ad-card.flipped {
+    background: var(--surface-green);
+}
+
+.ad-card small {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-2);
+}
+
+/* ========================================
+   TEMPORIZADOR E FOCO
+======================================== */
+
+.ad-timer {
+    font-size: 2.4rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.ad-focus {
+    padding: 18px;
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 620px) {
+    .ui-bars {
+        gap: 5px;
+    }
+
+    .ui-table th,
+    .ui-table td {
+        padding: 8px 4px;
+        font-size: 0.82rem;
+    }
+}
+
+/* ========================================
+   CORREÇÃO DO BOTÃO DE AJUDA FLUTUANTE
+======================================== */
+
+/* O botão de ajuda flutuante cobria o botão
+   de enviar da tela de adaptação. */
+
+.adaptation-reference .help-fab {
+    display: none;
+}

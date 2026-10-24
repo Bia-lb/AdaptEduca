@@ -1,0 +1,149 @@
+
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="AdaptEduca — educação personalizada e acessível."
+    >
+
+    <title>Nova senha | AdaptEduca</title>
+
+    <!-- Configuração automática do tema -->
+    <script>
+        document.documentElement.dataset.theme =
+            localStorage.getItem('adapteduca_theme') ||
+            (matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light');
+    </script>
+
+    <!-- Arquivos CSS -->
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="./css/app.css">
+</head>
+
+<body data-root="./" data-page="redefinir-senha">
+
+    <!-- Conteúdo principal -->
+    <main class="auth-page">
+
+        <!-- Card de redefinição de senha -->
+        <section class="card auth-card">
+
+            <!-- Ícone -->
+            <div class="auth-icon">✉</div>
+
+            <!-- Título e descrição -->
+            <h1>Criar nova senha</h1>
+
+            <p class="auth-sub">
+                Escolha uma senha com pelo menos 8 caracteres.
+            </p>
+
+            <!-- Formulário de redefinição -->
+            <form
+                class="auth-form"
+                id="resetForm"
+            >
+
+                <!-- Nova senha -->
+                <div class="input-group">
+
+                    <label for="password">
+                        Nova senha
+                    </label>
+
+                    <input
+                        class="input"
+                        id="password"
+                        name="password"
+                        type="password"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+                <!-- Confirmação da senha -->
+                <div class="input-group">
+
+                    <label for="confirm">
+                        Confirmar senha
+                    </label>
+
+                    <input
+                        class="input"
+                        id="confirm"
+                        name="confirm"
+                        type="password"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+                <!-- Botão para redefinir a senha -->
+                <button
+                    class="btn btn-primary btn-block"
+                    type="submit"
+                >
+                    Redefinir senha
+                </button>
+
+                <!-- Mensagem de retorno -->
+                <p
+                    class="small muted"
+                    id="resetMsg"
+                    role="status"
+                ></p>
+
+            </form>
+
+            <!-- Link para retornar ao login -->
+            <p class="auth-footer">
+
+                <a
+                    href="login.html"
+                    style="color:var(--primary);font-weight:700"
+                >
+                    ← Voltar ao login
+                </a>
+
+            </p>
+
+        </section>
+
+        <!-- Botão de alternância do tema -->
+        <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            style="position:fixed;top:14px;right:14px"
+        >
+            ☾
+        </button>
+
+    </main>
+
+    <!-- Arquivos JavaScript -->
+    <script defer src="./js/data.js"></script>
+    <script defer src="./js/theme.js"></script>
+    <script defer src="./js/api.js"></script>
+    <script defer src="./js/auth.js"></script>
+    <script defer src="./js/navigation.js"></script>
+    <script defer src="./js/components.js"></script>
+    <script defer src="./js/ui.js"></script>
+    <script defer src="./js/script.js"></script>
+    <script defer src="./js/pages-auth.js"></script>
+
+</body>
+
+</html>
