@@ -3,6 +3,13 @@ from app.services.atividade_service import AtividadeService
 from app.services.turma_service import TurmaService
 from .base_controller import BaseController
 
+import os
+import uuid
+
+from flask import current_app
+from werkzeug.utils import secure_filename
+
+
 
 class AtividadeController(BaseController):
     def __init__(self) -> None:
@@ -36,18 +43,93 @@ class AtividadeController(BaseController):
             dados["minhaResposta"] = resposta.to_dict() if resposta else None
         return self.sucesso(dados)
 
+
     def criar(self):
-        dados = request.get_json(silent=True) or {}
-        for campo in ["titulo", "turma_id"]:
+        dados = (
+            request.form.to_dict()
+            if request.form
+            else (request.get_json(silent=True) or {})
+        )
+
+        for campo in ("titulo", "turma_id"):
             if not dados.get(campo):
-                return self.erro(f"Campo obrigatório ausente: {campo}.", 422)
+                return self.erro(
+                    f"Campo obrigatório ausente: {campo}.",
+                    422
+                )
+
+        arquivo = request.files.get("pdf")
+        caminho = None
+
         try:
-            atividade = self._service.criar(dados, g.usuario_id)
-            return self.sucesso(atividade.to_dict(), "Atividade criada.", 201)
-        except PermissionError as exc:
-            return self.erro(str(exc), 403)
-        except ValueError as exc:
-            return self.erro(str(exc), 422)
+            if arquivo and arquivo.filename:
+                nome_original = secure_filename(
+                    arquivo.filename
+                )
+
+                if not nome_original.lower().endswith(".pdf"):
+                    raise ValueError(
+                        "O arquivo precisa ser um PDF."
+                    )
+
+                conteudo = arquivo.read(10 * 1024 * 1024 + 1)
+
+                if len(conteudo) > 10 * 1024 * 1024:
+                    raise ValueError(
+                        "O PDF deve ter no máximo 10 MB."
+                    )
+
+                if not conteudo.startswith(b"%PDF-"):
+                    raise ValueError(
+                        "O arquivo enviado não é um PDF válido."
+                    )
+
+                nome_salvo = (
+                    uuid.uuid4().hex + ".pdf"
+                )
+
+                pasta = os.path.join(
+                    current_app.config["UPLOAD_DIR"],
+                    "atividades"
+                )
+
+                os.makedirs(pasta, exist_ok=True)
+
+                caminho = os.path.join(pasta, nome_salvo)
+
+                with open(caminho, "wb") as destino:
+                    destino.write(conteudo)
+
+                dados["pdfArquivo"] = nome_salvo
+                dados["pdfOriginal"] = nome_original[:255]
+
+            atividade = self._service.criar(
+                dados,
+                g.usuario_id
+            )
+
+            return self.sucesso(
+                atividade.to_dict(),
+                "Atividade criada.",
+                201
+            )
+
+        except (PermissionError, ValueError) as erro:
+            if caminho and os.path.exists(caminho):
+                os.remove(caminho)
+
+            codigo = (
+                403 if isinstance(erro, PermissionError)
+                else 422
+            )
+
+            return self.erro(str(erro), codigo)
+
+        except Exception:
+            if caminho and os.path.exists(caminho):
+                os.remove(caminho)
+            raise
+
 
     def atualizar(self, id: int):
         _, erro = self._do_professor(id)

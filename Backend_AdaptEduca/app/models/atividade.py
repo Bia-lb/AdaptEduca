@@ -18,6 +18,10 @@ class Atividade(db.Model):
     turma_id = db.Column(db.Integer, db.ForeignKey("turma.id"), nullable=False)
     questoes = db.Column(db.Text)  # JSON: lista de enunciados
     etapas = db.Column(db.Text)    # JSON: [{"titulo","instrucao"}]
+    pdfArquivo = db.Column(db.String(255), nullable=True)
+    pdfOriginal = db.Column(db.String(255), nullable=True)
+    links = db.Column(db.Text, nullable=True)
+
 
     respostas = db.relationship("Resposta", backref="atividade", lazy=True,
                                 cascade="all, delete-orphan")
@@ -77,6 +81,10 @@ class Atividade(db.Model):
             "turma_id": self.turma_id,
             "questoes": self.lista_questoes(),
             "etapas": self.lista_etapas(),
+            "temPdf": bool(self.pdfArquivo),
+            "pdfOriginal": self.pdfOriginal,
+            "links": json.loads(self.links) if self.links else [],
+
         }
 
     def lista_etapas(self) -> list:

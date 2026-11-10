@@ -45,12 +45,22 @@ class TurmaController(BaseController):
         turma = self._service.atualizar(id, dados)
         return self.sucesso(turma.to_dict(), "Turma atualizada.")
 
+
     def deletar(self, id: int):
         turma, erro = self._turma_do_professor(id)
+
         if erro:
             return erro
-        self._service.deletar(id)
-        return self.sucesso(mensagem="Turma removida.")
+
+        try:
+            self._service.deletar(id)
+            return self.sucesso(
+                mensagem="Turma removida."
+            )
+
+        except ValueError as exc:
+            return self.erro(str(exc), 409)
+
 
     # ── alunos da turma ─────────────────────────────────────────────────────
     def listar_alunos(self, id: int):

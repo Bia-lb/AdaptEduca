@@ -1,6 +1,8 @@
 import json
 from datetime import date, datetime, timezone
 from typing import List, Optional
+from urllib.parse import urlparse
+
 
 from app import db
 from app.models.aluno import Aluno
@@ -55,7 +57,48 @@ def _normalizar_etapas(valor) -> Optional[str]:
     return json.dumps(etapas, ensure_ascii=False)
 
 
+def _normalizar_links(valor):
+    if not valor:
+        return "[]"
+
+    if isinstance(valor, str):
+        valor = valor.splitlines()
+
+    if not isinstance(valor, list):
+        raise ValueError("Formato de links inválido.")
+
+    links = []
+
+    for item in valor:
+        link = str(item).strip()
+
+        if not link:
+            continue
+
+        partes = urlparse(link)
+
+        if (
+            partes.scheme not in ("http", "https")
+            or not partes.netloc
+            or len(link) > 2048
+        ):
+            raise ValueError(
+                "Informe links válidos começando com https:// ou http://."
+            )
+
+        links.append(link)
+
+    if len(links) > 10:
+        raise ValueError(
+            "Adicione no máximo 10 links."
+        )
+
+    return json.dumps(links, ensure_ascii=False)
+
+
+
 class AtividadeService:
+
     def __init__(self) -> None:
         self._repo = AtividadeRepository()
         self._turmas = TurmaService()
@@ -110,6 +153,10 @@ class AtividadeService:
         if not titulo:
             raise ValueError("O título é obrigatório.")
         return Atividade.criar(
+
+            pdfArquivo=dados.get("pdfArquivo"),
+            pdfOriginal=dados.get("pdfOriginal"),
+            links=_normalizar_links(dados.get("links")),
             titulo=titulo, descricao=dados.get("descricao"),
             prazo=_parse_prazo(dados.get("prazo")),
             questoes=_normalizar_questoes(dados.get("questoes")),

@@ -1,35 +1,12 @@
+
 import os
 
-from flask import Flask, jsonify, request
-from flask_cors import CORS
-
+from flask import jsonify
 from app import create_app
-
 
 env = os.getenv("FLASK_ENV", "development")
 
-app = create_app()
-# app = create_app(env)
-
-CORS(
-    app,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "http://localhost:5500",
-                "http://127.0.0.1:5500"
-            ]
-        }
-    }
-)
-# CORS(
-    # app,
-    # resources={
-        # r"/api/*": {
-            # "origins": "*"
-        # }
-    # }
-# )
+app = create_app(env)
 
 
 @app.route("/api/status", methods=["GET"])
@@ -39,11 +16,10 @@ def status():
         "ambiente": env
     })
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
-# if __name__ == "__main__":
-    # app.run(
-        # host="0.0.0.0",
-        # port=5000,
-        # debug=(env == "development")
-    # )
+    app.run(
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )

@@ -237,28 +237,88 @@ def tea(texto: str) -> dict:
     }
 
 
+
 def mapa_mental(texto: str) -> dict:
-    """RF10: mapa mental com tema central e ramos baseados nos termos mais relevantes."""
+    """Gera um mapa mental organizado sem cortar frases."""
     texto = validar(texto)
     lista = frases(texto)
     chave = palavras_chave(texto, 12)
-    centro = " ".join(chave[:2]).title() if chave else "Tema central"
-    ramos, usadas = [], set()
-    for termo in chave[2:] or chave:
-        if len(ramos) >= 6:
-            break
-        candidatas = [f for f in lista if _norm(termo) in _norm(f) and f not in usadas]
-        if not candidatas:
+
+    centro = (
+        " ".join(chave[:2]).title()
+        if chave else "Tema central"
+    )
+
+    categorias = {
+        "Conceito principal": [
+            "sao", "e definido", "consiste",
+            "representa", "significa"
+        ],
+        "Tipos e classificações": [
+            "tipos", "dividid", "classific",
+            "categorias", "grupos"
+        ],
+        "Estrutura e componentes": [
+            "estrutura", "formad", "compost",
+            "partes", "componentes"
+        ],
+        "Funções e características": [
+            "funcion", "responsavel", "permite",
+            "caracteristic", "utiliz"
+        ],
+        "Exemplos e aplicações": [
+            "exemplo", "como por exemplo",
+            "aplic", "podem ser"
+        ]
+    }
+
+    grupos = {nome: [] for nome in categorias}
+    extras = []
+
+    for frase in lista:
+        frase = frase.strip()
+        if not frase:
             continue
-        filhos = []
-        for f in candidatas[:3]:
-            usadas.add(f)
-            curto = " ".join(f.split()[:9]).rstrip(".,;:") + ("…" if len(f.split()) > 9 else "")
-            filhos.append(curto)
-        ramos.append({"titulo": termo.capitalize(), "filhos": filhos})
+
+        normalizada = _norm(frase)
+        categoria = None
+
+        for nome, termos in categorias.items():
+            if any(t in normalizada for t in termos):
+                categoria = nome
+                break
+
+        if categoria:
+            grupos[categoria].append(frase)
+        else:
+            extras.append(frase)
+
+    ramos = []
+
+    for nome, itens in grupos.items():
+        if itens:
+            ramos.append({
+                "titulo": nome,
+                "filhos": itens[:4]
+            })
+
+    if extras:
+        ramos.append({
+            "titulo": "Outras informações importantes",
+            "filhos": extras[:4]
+        })
+
     if not ramos:
-        ramos = [{"titulo": "Ideias", "filhos": [" ".join(f.split()[:9]) for f in lista[:4]]}]
-    return {"modo": "Mapa mental", "centro": centro, "ramos": ramos}
+        ramos = [{
+            "titulo": "Ideias principais",
+            "filhos": lista[:4]
+        }]
+
+    return {
+        "modo": "Mapa mental",
+        "centro": centro,
+        "ramos": ramos[:6]
+    }
 
 
 def audio(texto: str) -> dict:

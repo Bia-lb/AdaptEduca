@@ -55,11 +55,34 @@ class TurmaService:
             raise LookupError(f"Turma {id} não encontrada.")
         return turma.atualizar(**{k: v for k, v in dados.items() if k in CAMPOS_EDITAVEIS})
 
+
     def deletar(self, id: int) -> None:
         turma = Turma.buscar_por_id(id)
+
         if not turma:
-            raise LookupError(f"Turma {id} não encontrada.")
+            raise LookupError(
+                f"Turma {id} não encontrada."
+            )
+
+        if turma.alunos:
+            raise ValueError(
+                "Remova os alunos da turma antes de excluí-la."
+            )
+
+        if turma.atividades:
+            raise ValueError(
+                "Esta turma possui atividades. "
+                "A exclusão foi bloqueada para proteger os dados."
+            )
+
+        if turma.conteudos:
+            raise ValueError(
+                "Esta turma possui conteúdos publicados. "
+                "A exclusão foi bloqueada para proteger os materiais."
+            )
+
         turma.deletar()
+
 
     # ── vínculo aluno ↔ turma (RF05) ────────────────────────────────────────
     def adicionar_aluno(self, turma: Turma, dados: dict) -> Aluno:
