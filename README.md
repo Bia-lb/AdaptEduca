@@ -1,70 +1,65 @@
-[README.md](https://github.com/user-attachments/files/30683016/README.md)
-Nome do projeto: AdaptEduca
+ AdaptEduca
 
-Nome completo dos integrantes da equipe:
+ Integrantes da equipe
 
- Arthur Vinicius Gomes Campos
- 
- Bianca Alves da Silva
- 
- Carlos Henrique Simoes Neto
- 
- Maria Clara de Aquino Souza
- 
- Maria Edurada Oliveira Lavorato Andrada
- 
- Sarah Elise Alcantara de Freitas
+- Arthur Vinicius Gomes Campos
+- Bianca Alves da Silva
+- Carlos Henrique Simoes Neto
+- Maria Clara de Aquino Souza
+- Maria Edurada Oliveira Lavorato Andrada
+- Sarah Elise Alcantara de Freitas
 
+ Tecnologias utilizadas
 
-Stack utilizada no projeto, separando frontend, backend e banco de dados:
+- Frontend: HTML5, CSS e JavaScript, utilizados para desenvolver a interface do usuário.
+- Backend: Python, responsável pela lógica do sistema e integração com o banco de dados.
+- Banco de dados: MySQL, utilizado para armazenar e gerenciar as informações.
+- Inteligência Artificial: Google Gemini, utilizado para personalizar os conteúdos e auxiliar os estudantes.
 
--Frontend: HTML5, CSS e JavaScript, utilizados para desenvolver a interface do usuário.
--Backend: Python, responsável pela lógica de negócio, processamento das requisições e integração com o banco de dados.
--Banco de Dados: MySql, utilizado para armazenar e gerenciar os dados da aplicação.
+ Descrição do projeto
 
-Breve descrição do sistema:
-O Adapt Educa é uma plataforma web desenvolvida para auxiliar estudantes com dificuldades de aprendizagem, seus responsáveis e professores. O sistema utiliza inteligência artificial para adaptar os conteúdos enviados pelos professores de acordo com o perfil e as necessidades individuais de cada aluno, tornando o processo de ensino mais acessível, personalizado e eficiente.
+O AdaptEduca é uma plataforma web desenvolvida para auxiliar estudantes com dificuldades de aprendizagem, seus responsáveis e professores.
 
-Os professores podem cadastrar conteúdos e acompanhar o desempenho dos alunos, enquanto os responsáveis têm acesso à evolução da aprendizagem. Já os alunos recebem materiais adaptados em diferentes formatos, como resumos, mapas mentais, textos simplificados, flashcards e outros recursos que facilitam a compreensão do conteúdo.
+O sistema utiliza a inteligência artificial do Google Gemini para adaptar os conteúdos enviados pelos professores de acordo com o perfil e as necessidades individuais de cada aluno, tornando o processo de ensino mais acessível, personalizado e eficiente.
 
-O objetivo do Adapt Educa é promover uma educação mais inclusiva, oferecendo ferramentas que contribuam para o desenv
+Os professores podem cadastrar conteúdos e acompanhar o desempenho dos alunos, enquanto os responsáveis têm acesso à evolução da aprendizagem.
 
-Instruções básicas para executar o projeto, quando aplicável:
-Instruções Básicas para Execução
-Requisitos
-MySQL 8.0 ou superior
-Servidor web compatível com a aplicação (quando implementada)
-Navegador atualizado (Google Chrome, Microsoft Edge ou Mozilla Firefox)
-Conexão com a internet (caso a aplicação utilize serviços de inteligência artificial)
-Configuração do Banco de Dados
-Instale o MySQL.
-Crie um banco de dados chamado adapt_educa.
-Execute o script SQL fornecido para criar todas as tabelas e seus relacionamentos.
-Verifique se todas as tabelas foram criadas corretamente antes de iniciar a aplicação.
-Execução da Aplicação
-Clone ou faça o download do projeto.
-Configure o arquivo de conexão com o banco de dados utilizando as credenciais do seu servidor MySQL.
-Inicie o servidor da aplicação conforme a tecnologia utilizada no desenvolvimento.
-Acesse o sistema pelo navegador utilizando o endereço configurado (por exemplo, http://localhost).
-Observações
-Certifique-se de que o banco de dados esteja em execução antes de iniciar a aplicação.
-Caso o sistema utilize serviços de inteligência artificial, configure as chaves de API necessárias antes da execução.
-Recomenda-se utilizar versões atualizadas das dependências do projeto para garantir compatibilidade e segurança.
+Já os alunos recebem materiais adaptados em diferentes formatos, como resumos, mapas mentais, textos simplificados, flashcards e outros recursos que facilitam a compreensão do conteúdo.
 
-## Atualização: agentes de IA (Claude)
+Funcionalidades com Google Gemini
 
-Três agentes usam a API da Anthropic. **Tudo é opcional**: sem `ANTHROPIC_API_KEY` o sistema funciona como antes (motor por regras) e os recursos de IA ficam ocultos.
+O AdaptEduca utiliza a inteligência artificial do Google Gemini em três funcionalidades principais:
 
-1. **Adaptação de conteúdo** (`ia_adaptacao.py`): gera resumo, texto simplificado, TDAH, TEA, mapa mental e flashcards no mesmo JSON do motor por regras. A resposta é validada campo a campo; se a IA falhar, estourar a cota ou estiver fora do ar, o motor por regras assume (`fonte: "regras"`). O resultado em cache é compartilhado por conteúdo+modo e é refeito com IA quando ela ficar disponível. O modo Áudio nunca usa IA.
-2. **Tutor** (`POST /api/tutor/mensagem`): chat socrático sobre um conteúdo da turma ou texto colado. A conversa vive só no navegador; o servidor não grava nada.
-3. **Acompanhamento** (`POST /api/progresso/aluno/<id>/analise`): agente com ferramentas (progresso, matérias, evolução, pendências, feedbacks, modos de estudo) que escreve `resumo`, `pontosFortes`, `pontosDeAtencao` e `sugestoes` para professor, responsável ou aluno, com tom adequado a cada um. Só roda ao clicar em "Gerar análise com IA".
+1. Adaptação de conteúdos: transforma materiais escolares em diferentes formatos para atender às necessidades dos estudantes.
+2. Tutor inteligente: auxilia os alunos durante os estudos, esclarecendo dúvidas e oferecendo explicações personalizadas.
+3. Acompanhamento de aprendizagem: analisa o desempenho dos estudantes e apresenta sugestões para melhorar o aprendizado.
 
-Configuração (variáveis de ambiente, ver `.env.example`): `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (padrão `claude-sonnet-5-5`), `IA_LIMITE_DIARIO` (chamadas por usuário/dia), `IA_TIMEOUT`. A chave fica só no servidor. Banco: rode `Backend_AdaptEduca/migracao_v4.sql` (tabela `ia_uso`). `GET /api/ia/status` informa se a IA está disponível e quantos usos restam.
+Caso a inteligência artificial não esteja disponível, o sistema possui recursos de adaptação que funcionam sem conexão com a API.
 
-Segurança e privacidade:
-- Nome, e-mail e matrícula nunca vão ao modelo; o tutor só recebe o texto do conteúdo e preferências genéricas de aprendizagem.
-- Conteúdo e feedbacks entram como dados delimitados; instruções dentro deles são ignoradas. As ferramentas do agente de acompanhamento são presas ao aluno já autorizado pela rota e o modelo não escolhe o aluno.
-- Cota diária por usuário, timeout, pausa de 45 s após falha da API e limite de 12 mil caracteres por conteúdo (acima disso usa regras).
-- **LGPD:** os textos e dados de desempenho de menores são enviados a um terceiro (Anthropic). Antes de ativar em produção, obtenha o consentimento dos responsáveis, atualize a política de privacidade e confirme os termos de retenção de dados da API com a Anthropic.
+Instruções básicas para execução
 
-Testes: `tests/test_agentes_ia.py` usa um cliente Claude falso (nenhuma chamada real).
+Requisitos:
+- MySQL 8.0 ou superior.
+- Python e dependências do projeto.
+- Navegador atualizado.
+- Conexão com a internet para utilizar o Google Gemini.
+
+Configuração:
+
+Para utilizar o sistema, é necessário configurar o banco de dados MySQL, iniciar o servidor da aplicação e acessar a plataforma pelo navegador.
+
+Para ativar os recursos de inteligência artificial, é necessário obter uma chave de API do Google Gemini e configurá-la no ambiente do Backend.
+
+Segurança e privacidade
+
+O sistema possui autenticação de usuários, controle de acesso e medidas de proteção das informações.
+
+A chave de acesso ao Google Gemini permanece no servidor e não deve ser compartilhada publicamente.
+
+O uso de dados reais de estudantes deve respeitar a Lei Geral de Proteção de Dados (LGPD).
+
+ Objetivo do projeto
+
+O objetivo do AdaptEduca é promover uma educação mais inclusiva, oferecendo ferramentas tecnológicas que contribuam para o desenvolvimento dos estudantes e tornem a aprendizagem mais acessível e personalizada.
+
+Projeto desenvolvido pelos alunos do Curso Técnico em Informática — Cotemig, 2026.
