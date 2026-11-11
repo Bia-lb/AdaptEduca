@@ -1,91 +1,40 @@
-
 <!doctype html>
 <html lang="pt-BR">
-
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Atividades do Professor — AdaptEduca">
-
     <title>Atividades do Professor | AdaptEduca</title>
-
-    <!-- Configuração automática do tema -->
     <script>
-        document.documentElement.dataset.theme =
-            localStorage.getItem('adapteduca_theme') ||
-            (matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light');
+      document.documentElement.dataset.theme = localStorage.getItem('adapteduca_theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     </script>
-
-    <!-- Arquivos CSS -->
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/app.css">
-</head>
-
-<body
-    data-root="./"
-    data-page="atividades-professor"
-    data-private="true"
-    data-role="professor"
->
-    <!-- Cabeçalho -->
+  </head>
+  <body data-root="./" data-page="atividades-professor" data-private="true" data-role="professor">
     <div id="site-header"></div>
-
-    <!-- Conteúdo principal -->
     <main>
-
-        <!-- Apresentação da página -->
-        <section class="page-hero">
-            <div class="container">
-                <h1>Atividades</h1>
-                <p>Crie exercícios, quizzes e tarefas para suas turmas.</p>
-            </div>
-        </section>
-
-        <!-- Área de atividades do professor -->
-        <div class="container app-page">
-
-            <!-- Cabeçalho das atividades -->
-            <div class="page-title-row">
-
-                <div>
-                    <h2>Atividades publicadas</h2>
-
-                    <p
-                        class="muted small"
-                        id="atividadesResumo"
-                    >
-                        Carregando…
-                    </p>
-                </div>
-
-                <!-- Botão para criar atividade -->
-                <button
-                    class="btn btn-primary"
-                    id="newAtividadeBtn"
-                    type="button"
-                >
-                    + Criar atividade
-                </button>
-
-            </div>
-
-            <!-- Lista de atividades publicadas -->
-            <section
-                class="grid grid-2"
-                id="activitiesGrid"
-            ></section>
-
+      <section class="page-hero">
+        <div class="container">
+          <h1>Atividades</h1>
+          <p>Crie exercícios, quizzes e tarefas para suas turmas.</p>
         </div>
-
+      </section>
+      <div class="container app-page">
+        <div class="page-title-row">
+          <div>
+            <h2>Atividades publicadas</h2>
+            <p class="muted small" id="atividadesResumo">Carregando…</p>
+          </div>
+          <button class="btn btn-primary" id="newAtividadeBtn" type="button">+ Criar atividade</button>
+        </div>
+        <section class="grid grid-2" id="activitiesGrid"></section>
+      </div>
     </main>
-
-    <!-- Arquivos JavaScript -->
     <script defer src="js/data.js"></script>
     <script defer src="js/theme.js"></script>
     <script defer src="js/api.js"></script>
@@ -95,7 +44,5 @@
     <script defer src="js/ui.js"></script>
     <script defer src="js/script.js"></script>
     <script defer src="js/pages-professor.js"></script>
-
-</body>
-
+  </body>
 </html>

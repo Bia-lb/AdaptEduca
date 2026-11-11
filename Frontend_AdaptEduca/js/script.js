@@ -9,20 +9,192 @@
     initApiPages();
   });
 
-  function initSelectableCards() {
-    document.querySelectorAll('.select-card').forEach((card) => {
-      card.addEventListener('click', () => {
-        const input = card.querySelector('input');
-        if (input?.type === 'checkbox') input.checked = !input.checked;
-        else if (input) input.checked = true;
-        card.classList.toggle('selected', Boolean(input?.checked));
-      });
-    });
+  
+function initSelectableCards() {
 
-    document.querySelectorAll('[data-save-preferences]').forEach((button) => {
-      button.addEventListener('click', () => window.showToast?.('Preferências salvas com sucesso!', 'success'));
-    });
-  }
+    // ==========================================
+    // 1. ATUALIZAR APARÊNCIA DOS CARTÕES
+    // ==========================================
+
+    function atualizarCartao(input) {
+
+        const card = input.closest(".select-card");
+
+        if (!card) {
+            return;
+        }
+
+        card.classList.toggle(
+            "selected",
+            input.checked
+        );
+    }
+
+    // ==========================================
+    // 2. SELECIONAR E DESMARCAR CARTÕES
+    // ==========================================
+
+    document.querySelectorAll(".select-card input")
+        .forEach(function (input) {
+
+            // Atualiza o estado inicial.
+            atualizarCartao(input);
+
+            // O navegador controla o checkbox.
+            input.addEventListener("change", function () {
+
+                if (input.type === "radio") {
+
+                    // Atualiza todos os cartões
+                    // pertencentes ao mesmo grupo.
+                    document.querySelectorAll(
+                        `input[name="${input.name}"]`
+                    ).forEach(atualizarCartao);
+
+                } else {
+
+                    // Permite marcar e desmarcar
+                    // vários checkboxes.
+                    atualizarCartao(input);
+
+                }
+            });
+        });
+
+   
+    // ==========================================
+    // 3. BOTÃO SALVAR PREFERÊNCIAS
+    // ==========================================
+
+    
+    // ==========================================
+    // CARREGAR PREFERÊNCIAS DO ALUNO
+    // ==========================================
+
+    async function carregarPreferencias() {
+
+        const inputs = document.querySelectorAll(
+            '.preference-grid input[name="preference"]'
+        );
+
+        if (!inputs.length) {
+            return;
+        }
+
+        const api = window.AdaptEducaAPI;
+
+        try {
+
+            const resposta = await api.get(
+                "/alunos/me/preferencias"
+            );
+
+            const preferencias =
+                resposta.dados?.preferencias;
+
+            if (!Array.isArray(preferencias)) {
+                return;
+            }
+
+            // Marcar as preferências salvas.
+            inputs.forEach(function (input) {
+
+                input.checked = preferencias.includes(
+                    input.value
+                );
+
+                atualizarCartao(input);
+
+            });
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar preferências:",
+                erro
+            );
+
+        }
+    }
+
+    // Carrega as preferências ao abrir a página.
+    if (document.querySelector(".preference-grid")) {
+        carregarPreferencias();
+    }
+
+
+    document.querySelectorAll("[data-save-preferences]")
+        .forEach(function (button) {
+
+            button.addEventListener("click", async function () {
+
+                const inputs = document.querySelectorAll(
+                    '.preference-grid input[name="preference"]'
+                );
+
+                const selecionadas = Array.from(inputs)
+                    .filter(input => input.checked)
+                    .map(input => input.value);
+
+                if (selecionadas.length === 0) {
+                    window.showToast?.(
+                        "Selecione pelo menos uma preferência.",
+                        "error"
+                    );
+                    return;
+                }
+
+                button.disabled = true;
+
+                try {
+                    const api = window.AdaptEducaAPI;
+
+                    if (!api) {
+                        throw new Error(
+                            "A API do adaptEduca não está disponível."
+                        );
+                    }
+
+                    // Envia as preferências para o servidor.
+                    const resposta = await api.put(
+                        "/alunos/me/preferencias",
+                        {
+                            preferencias: selecionadas
+                        }
+                    );
+
+                    if (resposta.sucesso !== true) {
+                        throw new Error(
+                            "O servidor não confirmou o salvamento."
+                        );
+                    }
+
+                    window.showToast?.(
+                        "Preferências salvas no seu perfil!",
+                        "success"
+                    );
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao salvar preferências:",
+                        erro
+                    );
+
+                    window.showToast?.(
+                        erro.message ||
+                        "Não foi possível salvar as preferências.",
+                        "error"
+                    );
+
+                } finally {
+                    button.disabled = false;
+                }
+            });
+        });
+}
+
+
 
   function initStudentCourses() {
     const subjectTabs = document.querySelector('#subjectTabs');
@@ -320,9 +492,79 @@
       <form id="addAlunoForm" style="display:flex;gap:8px;margin-top:14px">
         <input class="input" name="identificador" placeholder="Matrícula ou e-mail do aluno" required style="flex:1">
         <button class="btn btn-primary" type="submit">Adicionar</button>
-      </form>`, '<button class="btn btn-light modal-close" type="button">Fechar</button>');
+      </form>`, 
+          `
+            <button
+              class="btn btn-light modal-close"
+              type="button"
+            >
+              Fechar
+            </button>
+
+            <button
+              class="btn"
+              id="excluirTurmaBtn"
+              type="button"
+              style="background:#dc2626;color:white;margin-left:8px"
+            >
+              Excluir turma
+            </button>
+          `);
+
 
     const modal = [...document.querySelectorAll('.modal-backdrop')].pop();
+    
+      const botaoExcluir = modal.querySelector('#excluirTurmaBtn');
+
+      botaoExcluir?.addEventListener('click', async () => {
+
+        const primeiraConfirmacao = confirm(
+          `Deseja excluir a turma "${turma.nome}"?\n\n` +
+          'Essa ação não poderá ser desfeita.'
+        );
+
+        if (!primeiraConfirmacao) return;
+
+        const codigo = prompt(
+          `Para confirmar, digite o código da turma:\n${turma.codigo}`
+        );
+
+        if (codigo === null) return;
+
+        if (codigo.trim() !== String(turma.codigo)) {
+          window.showToast?.(
+            'Código incorreto. A turma não foi excluída.',
+            'error'
+          );
+          return;
+        }
+
+        botaoExcluir.disabled = true;
+
+        try {
+
+          await AdaptEducaAPI.delete(`/turmas/${turma.id}`);
+
+          modal.remove();
+
+          window.showToast?.(
+            'Turma excluída com sucesso!',
+            'success'
+          );
+
+          await renderTurmasFromApi();
+
+        } catch (erro) {
+
+          window.showToast?.(
+            erro.message || 'Não foi possível excluir a turma.',
+            'error'
+          );
+
+          botaoExcluir.disabled = false;
+        }
+
+      });
     const reload = async () => { try { await draw(); } catch (e) { window.showToast?.(e.message, 'error'); } };
     await reload();
 
@@ -368,7 +610,8 @@
         <p class="muted small">${a.questoes.length} questão(ões) · ${a.etapas.length} etapa(s) · entrega em ${escapeHtml(formatDate(a.prazo))}</p>
         <div class="progress" style="margin:16px 0"><span style="width:${pct}%"></span></div>
         <p class="small"><strong>${a.totalEnviadas} de ${a.totalAlunos}</strong> alunos enviaram</p>
-        <button class="btn btn-light" style="margin-top:14px" data-ver-respostas="${a.id}">Respostas e feedback</button>
+        <button class="btn btn-primary" style="margin-top:14px" data-ver-atividade="${a.id}" type="button">Ver atividade</button>
+        <button class="btn btn-light" style="margin-top:14px" data-ver-respostas="${a.id}" type="button">Respostas e feedback</button>
       </article>`;
     }).join('') || '<div class="card card-pad">Nenhuma atividade criada ainda.</div>';
 
@@ -421,7 +664,29 @@
           <div class="input-group"><label>Turma</label><select class="input" name="turma_id" required>${turmas.map(t => `<option value="${t.id}">${escapeHtml(t.nome)}</option>`).join('')}</select></div>
           <div class="input-group"><label>Título</label><input class="input" name="titulo" required maxlength="120"></div>
           <div class="input-group"><label>Descrição</label><input class="input" name="descricao" placeholder="Orientações para o aluno"></div>
-          <div class="input-group"><label>Prazo</label><input class="input" type="date" name="prazo"></div>
+          <div class="input-group"><label>Prazo</label><input class="input" type="date" name="prazo"></div>  
+          <div class="input-group">
+            <label>PDF de apoio (opcional, até 10 MB)</label>
+            <input
+              class="input"
+              type="file"
+              name="pdf"
+              accept=".pdf,application/pdf"
+            >
+          </div>
+
+          <div class="input-group">
+            <label>Links complementares (opcional)</label>
+            <textarea
+              class="input"
+              name="links"
+              rows="3"
+              placeholder="https://exemplo.com/aula&#10;https://exemplo.com/video"
+            ></textarea>
+            <small class="muted">
+              Coloque um link por linha (máximo de 10).
+            </small>
+          </div>
           <div class="input-group"><label>Etapas (opcional — uma por linha, “Título: instrução”)</label><textarea class="input" name="etapas" rows="3" placeholder="Leia o texto: leia com atenção&#10;Faça o resumo: em 5 linhas"></textarea></div>
           <div class="input-group"><label>Questões (uma por linha)</label><textarea class="input" name="questoes" rows="3" placeholder="Quanto é 2 + 2?"></textarea></div>
           <button class="btn btn-primary btn-block" type="submit">Publicar atividade</button>
@@ -431,11 +696,19 @@
         const f = new FormData(event.target);
         if (!f.get('questoes').trim() && !f.get('etapas').trim()) { window.showToast?.('Informe ao menos uma questão ou etapa.', 'error'); return; }
         try {
-          await AdaptEducaAPI.post('/atividades/', {
-            turma_id: Number(f.get('turma_id')), titulo: f.get('titulo').trim(),
-            descricao: f.get('descricao').trim() || null, prazo: f.get('prazo') || null,
-            questoes: f.get('questoes'), etapas: f.get('etapas')
-          });
+        
+        const dados = new FormData(event.target);
+
+        const pdf = dados.get('pdf');
+
+        if (!pdf || !pdf.name) {
+            dados.delete('pdf');
+        } else if (pdf.size > 10 * 1024 * 1024) {
+            throw new Error('O PDF deve ter no máximo 10 MB.');
+        }
+
+        await AdaptEducaAPI.upload('/atividades/', dados);
+
           document.querySelector('.modal-backdrop')?.remove();
           window.showToast?.('Atividade publicada!', 'success');
           await renderAtividadesFromApi();
@@ -502,15 +775,124 @@
     const campos = atividade.questoes.map((q, i) => `
       <div class="input-group"><label>${i + 1}. ${escapeHtml(q)}</label>
         <textarea class="input" name="q${i}" rows="2" ${enviada ? 'disabled' : ''}>${escapeHtml(salvas[i] || '')}</textarea></div>`).join('');
-    const feedbacks = (atividade.feedbacks || []).map(f => `<p class="small" style="margin-top:8px"><span class="chip">${escapeHtml(f.tipo)}</span> ${escapeHtml(f.mensagem)}</p>`).join('');
-    window.openModal?.(escapeHtml(atividade.titulo), `
-      <p class="muted small">${escapeHtml(atividade.descricao || '')}</p>
-      <form id="respostaForm" class="auth-form" style="margin-top:12px;max-height:60vh;overflow:auto">
-        ${etapas ? `<h4>Etapas</h4><div>${etapas}</div>` : ''}${campos}
-        ${!etapas && !campos ? '<p class="muted">Esta atividade não tem questões.</p>' : ''}${feedbacks}</form>`,
-      enviada ? '<button class="btn btn-light modal-close" type="button">Fechar</button>'
-        : '<button class="btn btn-light" type="button" id="salvarRascunho">Salvar progresso</button><button class="btn btn-primary" type="button" id="enviarAtividade">Enviar</button>');
-    if (enviada) return;
+    const feedbacks = (atividade.feedbacks || []).map(f => `<p class="small" style="margin-top:8px"><span class="chip">${escapeHtml(f.tipo)}</span> ${escapeHtml(f.mensagem)}</p>`).join(''); 
+      const materiais = `
+        ${atividade.temPdf ? `
+          <p style="margin:12px 0">
+            <button
+              class="btn btn-light"
+              type="button"
+              id="baixarPdfAtividade"
+            >
+              Baixar PDF de apoio
+            </button>
+          </p>
+        ` : ''}
+
+        ${(atividade.links || []).length ? `
+          <div style="margin:12px 0">
+            <strong>Links complementares:</strong>
+            <ul style="padding-left:20px">
+              ${atividade.links.map(link => `
+                <li>
+                  <a
+                    href="${escapeHtml(link)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ${escapeHtml(link)}
+                  </a>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        ` : ''}
+      `;
+    
+window.openModal?.(escapeHtml(atividade.titulo), `
+  <p class="muted small">
+    ${escapeHtml(atividade.descricao || '')}
+  </p>
+
+  ${materiais}
+
+  <form
+    id="respostaForm"
+    class="auth-form"
+    style="margin-top:12px;max-height:60vh;overflow:auto"
+  >
+    ${etapas ? `<h4>Etapas</h4><div>${etapas}</div>` : ''}
+
+    ${campos}
+
+    ${!etapas && !campos
+      ? '<p class="muted">Esta atividade não tem questões.</p>'
+      : ''}
+
+    ${feedbacks}
+  </form>
+`,
+  enviada
+    ? '<button class="btn btn-light modal-close" type="button">Fechar</button>'
+    : '<button class="btn btn-light" type="button" id="salvarRascunho">Salvar progresso</button><button class="btn btn-primary" type="button" id="enviarAtividade">Enviar</button>'
+);
+
+// ==========================================
+// BAIXAR PDF DA ATIVIDADE
+// ==========================================
+
+document.querySelector('#baixarPdfAtividade')
+  ?.addEventListener('click', async () => {
+
+    try {
+      const resposta = await fetch(
+        `${AdaptEducaAPI.base}/atividades/${atividade.id}/pdf`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${AdaptEducaAPI.getToken()}`
+          }
+        }
+      );
+
+      if (!resposta.ok) {
+        throw new Error(
+          'Não foi possível baixar o PDF.'
+        );
+      }
+
+      const url = URL.createObjectURL(
+        await resposta.blob()
+      );
+
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download =
+        atividade.pdfOriginal || 'atividade.pdf';
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 5000);
+
+    } catch (erro) {
+      window.showToast?.(
+        erro.message,
+        'error'
+      );
+    }
+
+  });
+
+// Se a atividade já foi enviada,
+// o aluno pode visualizar os materiais,
+// mas não editar as respostas.
+if (enviada) return;
+
 
     const coletar = () => ({
       respostas: atividade.questoes.length ? atividade.questoes.map((_, i) => document.querySelector(`#respostaForm [name="q${i}"]`).value) : undefined,

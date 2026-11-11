@@ -43,7 +43,7 @@ class AtividadeController(BaseController):
             dados["minhaResposta"] = resposta.to_dict() if resposta else None
         return self.sucesso(dados)
 
-
+   
     def criar(self):
         dados = (
             request.form.to_dict()

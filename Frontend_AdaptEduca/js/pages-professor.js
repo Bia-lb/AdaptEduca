@@ -99,8 +99,21 @@
         + (itens.length ? `<div class="card card-pad ui-table-wrap"><table class="ui-table"><thead><tr><th>Título</th><th>Turma</th><th>Formato</th><th>Data</th><th></th></tr></thead><tbody>${itens.map(c => `<tr><td><strong>${esc(c.titulo)}</strong></td><td>${esc(c.turmaNome)}</td><td>${esc(c.tipo)}</td><td>${fmtDate(c.dataPostagem)}</td>
           <td style="white-space:nowrap"><button class="btn btn-light" data-ver="${c.id}" type="button">Ver</button> <button class="btn btn-light" data-del="${c.id}" type="button">Excluir</button></td></tr>`).join('')}</tbody></table></div>` : empty('Nenhum conteúdo publicado ainda.'));
       app.querySelectorAll('[data-ver]').forEach(b => b.onclick = async () => {
-        const c = (await api().get(`/conteudos/${b.dataset.ver}`)).dados;
-        const link = c.tipo === 'Link' && c.arquivo ? `<p><a href="${esc(c.arquivo)}" target="_blank" rel="noopener noreferrer">${esc(c.arquivo)}</a></p>` : '';
+        const c = (await api().get(`/conteudos/${b.dataset.ver}`)).dados;    
+        const endereco = c.linkExterno ||
+            (c.tipo === 'Link' ? c.arquivo : null);
+
+        const link = endereco
+            ? `<p>
+                <a
+                    href="${esc(endereco)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Abrir link complementar
+                </a>
+              </p>`
+            : '';
         modal(c.titulo, `${link}${c.texto ? `<div class="ad-box" style="max-height:50vh;overflow:auto"><p>${esc(c.texto).replace(/\n\n/g, '</p><p>')}</p></div>` : ''}`);
       });
       app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
@@ -115,33 +128,235 @@
   });
 
   // ── Enviar conteúdo (RF06) ────────────────────────────────────────────────
+// ==========================================
+  // ENVIAR CONTEÚDO — RF06
+  // Texto, PDF e link na mesma publicação
+  // ==========================================
+
   page('enviar-conteudo', async app => {
-    const turmas = (await api().get('/turmas/')).dados;
+
+    const turmas = (
+      await api().get('/turmas/')
+    ).dados;
+
     app.dataset.loading = '';
-    if (!turmas.length) { app.innerHTML = empty('Crie uma turma antes de publicar conteúdo.') + '<p style="margin-top:14px"><a class="btn btn-primary" href="turmas.html">Ir para Turmas</a></p>'; return; }
-    app.innerHTML = `<form class="card form-card" id="conteudoForm" style="max-width:780px">
-      <div class="ui-field"><label for="cTitulo">Título do conteúdo</label><input class="input" id="cTitulo" name="titulo" required maxlength="120"></div>
-      <div class="ui-field"><label for="cTurma">Turma</label><select class="input" id="cTurma" name="turma_id">${turmas.map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join('')}</select></div>
-      <div class="ui-field"><label>Formato</label><div class="ui-tabs" id="cTipo">${['Texto', 'PDF', 'Link'].map((t, i) => `<button type="button" data-tipo="${t}" class="${i ? '' : 'active'}">${t}</button>`).join('')}</div></div>
-      <div class="ui-field" data-for="Texto"><label for="cTexto">Texto do conteúdo</label><textarea class="input" id="cTexto" name="texto" rows="9" placeholder="Cole ou digite o conteúdo da aula"></textarea></div>
-      <div class="ui-field" data-for="PDF" hidden><label for="cPdf">Arquivo PDF (até 10 MB)</label><input class="input" id="cPdf" name="arquivo" type="file" accept="application/pdf"><small class="muted">O texto do PDF é extraído automaticamente para gerar as adaptações. PDFs escaneados como imagem não funcionam.</small></div>
-      <div class="ui-field" data-for="Link" hidden><label for="cLink">Endereço do link</label><input class="input" id="cLink" name="arquivo" type="url" placeholder="https://..."></div>
-      <p class="muted small">Ao publicar, cada aluno recebe o conteúdo adaptado ao seu perfil (resumo, TDAH, TEA, mapa mental, áudio, flashcards).</p>
-      <button class="btn btn-primary" type="submit" style="margin-top:12px">Publicar conteúdo</button></form>`;
-    let tipo = 'Texto';
-    const alternar = () => app.querySelectorAll('[data-for]').forEach(el => { const on = el.dataset.for === tipo; el.hidden = !on; el.querySelectorAll('input,textarea').forEach(i => { i.disabled = !on; }); });
-    app.querySelector('#cTipo').onclick = e => { const b = e.target.closest('[data-tipo]'); if (!b) return; tipo = b.dataset.tipo; app.querySelectorAll('#cTipo button').forEach(x => x.classList.toggle('active', x === b)); alternar(); };
-    alternar();
-    app.querySelector('#conteudoForm').onsubmit = async e => {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type=submit]'); btn.disabled = true;
-      const f = new FormData(e.target); f.set('tipo', tipo);
-      try {
-        if (tipo === 'PDF') await api().upload('/conteudos/', f);
-        else await api().post('/conteudos/', Object.fromEntries([...f.entries()].filter(([k]) => tipo === 'Link' || k !== 'arquivo')));
-        window.showToast?.('Conteúdo publicado!', 'success');
-        setTimeout(() => { location.href = 'materiais.html'; }, 700);
-      } catch (err) { window.showToast?.(err.message, 'error'); btn.disabled = false; }
-    };
+
+    if (!turmas.length) {
+      app.innerHTML =
+        empty('Crie uma turma antes de publicar conteúdo.') +
+        `<p style="margin-top:14px">
+          <a class="btn btn-primary" href="turmas.html">
+            Ir para Turmas
+          </a>
+        </p>`;
+      return;
+    }
+
+    // ========================================
+    // FORMULÁRIO
+    // ========================================
+
+    app.innerHTML = `
+      <form
+        class="card form-card"
+        id="conteudoForm"
+        style="max-width:780px"
+      >
+
+        <div class="ui-field">
+          <label for="cTitulo">
+            Título do conteúdo
+          </label>
+
+          <input
+            class="input"
+            id="cTitulo"
+            name="titulo"
+            maxlength="120"
+            required
+          >
+        </div>
+
+        <div class="ui-field">
+          <label for="cTurma">Turma</label>
+
+          <select
+            class="input"
+            id="cTurma"
+            name="turma_id"
+            required
+          >
+            ${turmas.map(t => `
+              <option value="${t.id}">
+                ${esc(t.nome)}
+              </option>
+            `).join('')}
+          </select>
+        </div>
+
+        <p class="muted small">
+          Você pode adicionar texto, PDF e link
+          na mesma publicação. Preencha pelo
+          menos um dos três campos.
+        </p>
+
+        <!-- TEXTO -->
+
+        <div class="ui-field">
+          <label for="cTexto">
+            Texto da aula (opcional)
+          </label>
+
+          <textarea
+            class="input"
+            id="cTexto"
+            name="texto"
+            rows="9"
+            placeholder="Cole ou digite o conteúdo da aula"
+          ></textarea>
+        </div>
+
+        <!-- PDF -->
+
+        <div class="ui-field">
+          <label for="cPdf">
+            Arquivo PDF (opcional, até 10 MB)
+          </label>
+
+          <input
+            class="input"
+            id="cPdf"
+            name="arquivo"
+            type="file"
+            accept="application/pdf,.pdf"
+          >
+
+          <small class="muted">
+            O texto do PDF será extraído para
+            gerar adaptações. PDFs escaneados
+            como imagem não são suportados.
+          </small>
+        </div>
+
+        <!-- LINK -->
+
+        <div class="ui-field">
+          <label for="cLink">
+            Link complementar (opcional)
+          </label>
+
+          <input
+            class="input"
+            id="cLink"
+            name="linkExterno"
+            type="url"
+            maxlength="2048"
+            placeholder="https://..."
+          >
+        </div>
+
+        <!-- MENSAGENS DE ERRO -->
+
+        <p
+          class="muted small"
+          id="cErro"
+          role="alert"
+        ></p>
+
+        <!-- PUBLICAR -->
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          style="margin-top:12px"
+        >
+          Publicar conteúdo
+        </button>
+
+      </form>
+    `;
+
+    // ========================================
+    // ENVIO AO BACK-END
+    // ========================================
+
+    app.querySelector('#conteudoForm').onsubmit =
+      async function (evento) {
+
+        evento.preventDefault();
+
+        const form = evento.currentTarget;
+
+        const btn = form.querySelector(
+          'button[type="submit"]'
+        );
+
+        const texto = form.querySelector(
+          '#cTexto'
+        ).value.trim();
+
+        const pdf = form.querySelector(
+          '#cPdf'
+        ).files[0];
+
+        const link = form.querySelector(
+          '#cLink'
+        ).value.trim();
+
+        const erro = form.querySelector('#cErro');
+
+        erro.textContent = '';
+
+        // Pelo menos um material obrigatório.
+        if (!texto && !pdf && !link) {
+          erro.textContent =
+            'Adicione texto, PDF ou link antes de publicar.';
+          return;
+        }
+
+        // Limite de 10 MB.
+        if (pdf && pdf.size > 10 * 1024 * 1024) {
+          erro.textContent =
+            'O PDF deve ter no máximo 10 MB.';
+          return;
+        }
+
+        btn.disabled = true;
+
+        try {
+
+          const dados = new FormData(form);
+
+          // Remove o arquivo vazio.
+          if (!pdf) {
+            dados.delete('arquivo');
+          }
+
+          // Envia todos os materiais juntos.
+          await api().upload('/conteudos/', dados);
+
+          window.showToast?.(
+            'Conteúdo publicado com sucesso!',
+            'success'
+          );
+
+          setTimeout(function () {
+            location.href = 'materiais.html';
+          }, 700);
+
+        } catch (erroPublicacao) {
+
+          erro.textContent =
+            erroPublicacao.message ||
+            'Não foi possível publicar o conteúdo.';
+
+          window.showToast?.(
+            erro.textContent,
+            'error'
+          );
+
+          btn.disabled = false;
+        }
+      };
   });
 })();

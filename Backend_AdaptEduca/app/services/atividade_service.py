@@ -98,7 +98,7 @@ def _normalizar_links(valor):
 
 
 class AtividadeService:
-
+    
     def __init__(self) -> None:
         self._repo = AtividadeRepository()
         self._turmas = TurmaService()
@@ -153,7 +153,7 @@ class AtividadeService:
         if not titulo:
             raise ValueError("O título é obrigatório.")
         return Atividade.criar(
-
+            
             pdfArquivo=dados.get("pdfArquivo"),
             pdfOriginal=dados.get("pdfOriginal"),
             links=_normalizar_links(dados.get("links")),

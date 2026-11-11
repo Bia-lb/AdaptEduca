@@ -68,13 +68,43 @@
 
   async function viewer(app, item, cfg, voltar) {
     const conteudo = (await api().get(`/conteudos/${item.id}`)).dados;
-    let modoEstudo = 'leitura', formato = 'para-mim';
+    let modoEstudo = 'leitura', formato = 'para-mim', parteAtual = 1;
     const foco = cfg.modos.find(m => m.id === 'foco');
     app.innerHTML = `<div class="ui-row" style="margin-bottom:12px"><button class="btn btn-light" id="vVoltar" type="button">← Conteúdos</button><div><strong>${esc(conteudo.titulo)}</strong> <span class="muted small">${esc(item.turmaNome)}</span></div></div>
       ${conteudo.temPdf ? '<p><button class="btn btn-light" id="vPdf" type="button">Baixar PDF original</button></p>' : ''}
+      
+    ${conteudo.linkExterno ? `
+        <p>
+            <a
+                class="btn btn-light"
+                href="${esc(conteudo.linkExterno)}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Abrir link complementar
+            </a>
+        </p>
+    ` : ''}
+
       <div class="ui-tabs" id="vModos">${cfg.modos.map(m => `<button type="button" data-m="${m.id}" class="${m.id === 'leitura' ? 'active' : ''}" title="${esc(m.descricao)}">${esc(m.nome)}</button>`).join('')}</div>
       <div id="vFormatos" class="ui-tabs">${MODOS_FORMATO.map(([id, nome]) => `<button type="button" data-f="${id}" class="${id === 'para-mim' ? 'active' : ''}">${esc(nome)}${id === cfg.recomendado ? ' ★' : ''}</button>`).join('')}</div>
-      <p class="muted small" id="vDesc"></p><div id="vCorpo" class="card card-pad"><p class="muted">Carregando…</p></div>
+      <p class="muted small" id="vDesc"></p>
+<div id="vPartes" class="ui-row"
+     style="display:none; margin:12px 0">
+
+    <button type="button" class="btn btn-light"
+            id="vParteAnterior">
+        ← Parte anterior
+    </button>
+
+    <span id="vParteLabel"></span>
+
+    <button type="button" class="btn btn-light"
+            id="vParteProxima">
+        Próxima parte →
+    </button>
+</div>
+<div id="vCorpo" class="card card-pad"><p class="muted">Carregando…</p></div>
       <details id="vTutorBox" class="card card-pad" style="margin-top:14px" hidden><summary><strong>💬 Tirar dúvidas com o tutor de IA</strong></summary><div id="vTutor" style="margin-top:10px"></div></details>`;
     const $ = s => app.querySelector(s);
     $('#vVoltar').onclick = voltar;
@@ -87,14 +117,68 @@
       } catch (e) { window.showToast?.(e.message, 'error'); }
     });
 
-    const buscar = async modo => (await api().get(`/conteudos/${item.id}/adaptacao?modo=${modo}`)).dados;
+    
+    // Navegação entre as partes do PDF
+    let totalPartes = 1;
+
+    function atualizarPartes(dados) {
+        totalPartes = dados.totalPartes || 1;
+        parteAtual = dados.parte || parteAtual;
+
+        $('#vPartes').style.display =
+            totalPartes > 1 ? 'flex' : 'none';
+
+        $('#vParteLabel').textContent =
+            `Parte ${parteAtual} de ${totalPartes}`;
+
+        $('#vParteAnterior').disabled =
+            parteAtual <= 1;
+
+        $('#vParteProxima').disabled =
+            parteAtual >= totalPartes;
+    }
+
+    // Voltar para a parte anterior
+    $('#vParteAnterior').onclick = () => {
+        if (parteAtual > 1) {
+            parteAtual--;
+            desenhar();
+        }
+    };
+
+    // Avançar para a próxima parte
+    $('#vParteProxima').onclick = () => {
+        if (parteAtual < totalPartes) {
+            parteAtual++;
+            desenhar();
+        }
+    };
+
+    // Buscar somente a parte selecionada
+    const buscar = async modo => {
+        const resposta = await api().get(
+            `/conteudos/${item.id}/adaptacao?modo=${encodeURIComponent(modo)}&parte=${parteAtual}`
+        );
+
+        const dados = resposta.dados;
+
+        atualizarPartes(dados);
+
+        return dados;
+    };
+
     async function desenhar() {
       Voz.parar(); clearInterval(desenhar.timer);
       const corpo = $('#vCorpo');
       $('#vFormatos').hidden = !(modoEstudo === 'leitura');
       $('#vDesc').textContent = cfg.modos.find(m => m.id === modoEstudo).descricao;
-      Sessao.iniciar(item.id, modoEstudo);
-      if (!conteudo.texto) { corpo.innerHTML = empty('Este conteúdo é apenas um link — abra-o pelo endereço informado pelo professor.') + (conteudo.arquivo ? `<p style="margin-top:12px"><a href="${esc(conteudo.arquivo)}" target="_blank" rel="noopener noreferrer">${esc(conteudo.arquivo)}</a></p>` : ''); return; }
+      Sessao.iniciar(item.id, modoEstudo);   
+      if (!conteudo.texto) {
+          corpo.innerHTML = empty(
+              'Este conteúdo não possui texto para adaptação. Acesse o material complementar acima.'
+          );
+          return;
+      }
       corpo.innerHTML = '<p class="muted">Gerando adaptação…</p>';
       try {
         if (modoEstudo === 'leitura') {

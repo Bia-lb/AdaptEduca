@@ -45,7 +45,7 @@ class TurmaController(BaseController):
         turma = self._service.atualizar(id, dados)
         return self.sucesso(turma.to_dict(), "Turma atualizada.")
 
-
+  
     def deletar(self, id: int):
         turma, erro = self._turma_do_professor(id)
 

@@ -55,7 +55,7 @@ class TurmaService:
             raise LookupError(f"Turma {id} não encontrada.")
         return turma.atualizar(**{k: v for k, v in dados.items() if k in CAMPOS_EDITAVEIS})
 
-
+   
     def deletar(self, id: int) -> None:
         turma = Turma.buscar_por_id(id)
 

@@ -16,9 +16,9 @@ class Config:
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "")
     MAIL_FROM = os.getenv("MAIL_FROM", "AdaptEduca <nao-responda@adapteduca.local>")
     TOKEN_MAX_AGE = int(os.getenv("TOKEN_MAX_AGE", str(60 * 60 * 12)))  # 12h
-    # Agentes de IA (Anthropic). A chave fica SOMENTE no servidor.
-    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
-    ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5-5")
+    # Integração Gemini: chave somente no backend.
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     IA_LIMITE_DIARIO = int(os.getenv("IA_LIMITE_DIARIO", "40"))   # chamadas por usuário/dia
     IA_TIMEOUT = float(os.getenv("IA_TIMEOUT", "40"))             # segundos
     IA_MAX_CARACTERES_CONTEUDO = int(os.getenv("IA_MAX_CARACTERES_CONTEUDO", "12000"))
@@ -54,7 +54,7 @@ class TestingConfig(Config):
     TESTING = True
     UPLOAD_DIR = os.path.join(os.getenv("TMPDIR", "/tmp"), "adapteduca-test-uploads")
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-    ANTHROPIC_API_KEY = ""  # testes nunca chamam a API real
+    GEMINI_API_KEY = ""  # testes nunca chamam a API real
 
 
 config = {

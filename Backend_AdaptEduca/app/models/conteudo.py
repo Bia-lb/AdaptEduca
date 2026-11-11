@@ -68,7 +68,7 @@ class Conteudo(db.Model):
             "titulo": self.titulo,
             "tipo": self.tipo,
             "arquivo": self.arquivo if self.tipo == "Link" else None,
-            "arquivoOriginal": self.arquivoOriginal,
+            "arquivoOriginal": self.arquivoOriginal,     
             "linkExterno": self.linkExterno,
             "temPdf": self.tipo == "PDF" and bool(self.arquivo),
             "dataPostagem": (
@@ -112,6 +112,25 @@ class Conteudo(db.Model):
 
             "turma_id": self.turma_id
         }
+
+
+    def to_dict_completo(self) -> dict:
+        """Retorna os dados completos do conteúdo para estudo."""
+
+        dados = self.to_dict()
+
+        dados.update({
+            "texto": self.texto,
+            "arquivoOriginal": self.arquivoOriginal,
+            "linkExterno": self.linkExterno,
+            "temPdf": bool(
+                self.arquivo
+                and self.arquivo.lower().endswith(".pdf")
+            )
+        })
+
+        return dados
+
 
 
     def __repr__(self) -> str:

@@ -1,25 +1,18 @@
--- AdaptEduca - esquema compatível com o backend Flask/SQLAlchemy
--- Execute este arquivo em um banco MySQL vazio caso não queira usar db.create_all().
-CREATE DATABASE IF NOT EXISTS adapteduca CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- ADAPTEDUCA - BANCO PRINCIPAL UNIFICADO
+-- Arquivos integrados: databasemodel.sql, adapteduca.sql, correçoes.sql.
+-- Serve para banco novo OU banco ja existente.
+-- NAO APAGA tabelas, contas, atividades ou dados atuais.
+-- Recomendado: exportar backup antes de executar.
+-- Contas de demonstracao sao inseridas SOMENTE se a tabela usuario estiver vazia.
+
+CREATE DATABASE IF NOT EXISTS adapteduca
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE adapteduca;
 
-DROP TABLE IF EXISTS sessao_estudo;
-DROP TABLE IF EXISTS resposta;
-DROP TABLE IF EXISTS responsavel_aluno;
-DROP TABLE IF EXISTS responsavel_turma;
-DROP TABLE IF EXISTS aluno_turma;
-DROP TABLE IF EXISTS feedback;
-DROP TABLE IF EXISTS adaptacao;
-DROP TABLE IF EXISTS relatorio;
-DROP TABLE IF EXISTS atividade;
-DROP TABLE IF EXISTS conteudo;
-DROP TABLE IF EXISTS turma;
-DROP TABLE IF EXISTS responsavel;
-DROP TABLE IF EXISTS professor;
-DROP TABLE IF EXISTS aluno;
-DROP TABLE IF EXISTS usuario;
+-- 1. Criacao de todas as tabelas, com todas as colunas consolidadas.
+-- CREATE TABLE IF NOT EXISTS preserva tabelas existentes.
 
-CREATE TABLE usuario (
+CREATE TABLE IF NOT EXISTS usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(120) NOT NULL,
     email VARCHAR(120) NOT NULL UNIQUE,
@@ -27,9 +20,9 @@ CREATE TABLE usuario (
     tipoPerfil ENUM('Aluno','Professor','Responsavel') NOT NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE aluno (
+CREATE TABLE IF NOT EXISTS aluno (
     id INT PRIMARY KEY,
-    matricula VARCHAR(20) NOT NULL UNIQUE,
+    matricula VARCHAR(50) NOT NULL UNIQUE,
     preferenciaAprendizagem VARCHAR(80),
     progresso FLOAT DEFAULT 0.0,
     dataNascimento DATE,
@@ -39,7 +32,7 @@ CREATE TABLE aluno (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE professor (
+CREATE TABLE IF NOT EXISTS professor (
     id INT PRIMARY KEY,
     formacao VARCHAR(120),
     disciplina VARCHAR(80),
@@ -47,7 +40,7 @@ CREATE TABLE professor (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE responsavel (
+CREATE TABLE IF NOT EXISTS responsavel (
     id INT PRIMARY KEY,
     parentesco VARCHAR(40),
     telefone VARCHAR(20),
@@ -55,7 +48,7 @@ CREATE TABLE responsavel (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE turma (
+CREATE TABLE IF NOT EXISTS turma (
     id INT AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(20) NOT NULL UNIQUE,
     nome VARCHAR(80) NOT NULL,
@@ -65,7 +58,7 @@ CREATE TABLE turma (
         ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE aluno_turma (
+CREATE TABLE IF NOT EXISTS aluno_turma (
     aluno_id INT NOT NULL,
     turma_id INT NOT NULL,
     PRIMARY KEY (aluno_id, turma_id),
@@ -75,7 +68,7 @@ CREATE TABLE aluno_turma (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE responsavel_turma (
+CREATE TABLE IF NOT EXISTS responsavel_turma (
     responsavel_id INT NOT NULL,
     turma_id INT NOT NULL,
     PRIMARY KEY (responsavel_id, turma_id),
@@ -85,7 +78,7 @@ CREATE TABLE responsavel_turma (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE responsavel_aluno (
+CREATE TABLE IF NOT EXISTS responsavel_aluno (
     responsavel_id INT NOT NULL,
     aluno_id INT NOT NULL,
     PRIMARY KEY (responsavel_id, aluno_id),
@@ -95,7 +88,7 @@ CREATE TABLE responsavel_aluno (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE conteudo (
+CREATE TABLE IF NOT EXISTS conteudo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(120) NOT NULL,
     tipo ENUM('Texto','PDF','Video','Link') NOT NULL,
@@ -103,12 +96,13 @@ CREATE TABLE conteudo (
     arquivoOriginal VARCHAR(255),
     texto LONGTEXT,
     dataPostagem DATE,
+    linkExterno VARCHAR(2048) NULL,
     turma_id INT NOT NULL,
     CONSTRAINT fk_conteudo_turma FOREIGN KEY (turma_id) REFERENCES turma(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE atividade (
+CREATE TABLE IF NOT EXISTS atividade (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(120) NOT NULL,
     descricao TEXT,
@@ -117,11 +111,14 @@ CREATE TABLE atividade (
     turma_id INT NOT NULL,
     questoes TEXT,
     etapas TEXT,
+    pdfArquivo LONGTEXT NULL,
+    pdfOriginal LONGTEXT NULL,
+    links TEXT NULL,
     CONSTRAINT fk_atividade_turma FOREIGN KEY (turma_id) REFERENCES turma(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE resposta (
+CREATE TABLE IF NOT EXISTS resposta (
     id INT AUTO_INCREMENT PRIMARY KEY,
     atividade_id INT NOT NULL,
     aluno_id INT NOT NULL,
@@ -138,7 +135,7 @@ CREATE TABLE resposta (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE sessao_estudo (
+CREATE TABLE IF NOT EXISTS sessao_estudo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aluno_id INT NOT NULL,
     conteudo_id INT NULL,
@@ -152,7 +149,7 @@ CREATE TABLE sessao_estudo (
 ) ENGINE=InnoDB;
 
 -- Agentes de IA: contador diário de chamadas por usuário
-CREATE TABLE ia_uso (
+CREATE TABLE IF NOT EXISTS ia_uso (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
     dia DATE NOT NULL,
@@ -162,7 +159,7 @@ CREATE TABLE ia_uso (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE adaptacao (
+CREATE TABLE IF NOT EXISTS adaptacao (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modo ENUM('Texto simplificado','Audio','Video','Mapa mental','Resumo','TDAH','TEA','Flashcards') NOT NULL,
     resumo TEXT,
@@ -174,7 +171,7 @@ CREATE TABLE adaptacao (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE feedback (
+CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     mensagem TEXT NOT NULL,
     data DATE,
@@ -187,7 +184,7 @@ CREATE TABLE feedback (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE relatorio (
+CREATE TABLE IF NOT EXISTS relatorio (
     id INT AUTO_INCREMENT PRIMARY KEY,
     desempenho FLOAT,
     tempoEstudo FLOAT,
@@ -200,32 +197,82 @@ CREATE TABLE relatorio (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- Usuários de demonstração utilizados pelos botões "Acesso rápido".
--- Senhas de demonstração: senha123 (gravadas como hash PBKDF2)
-INSERT INTO usuario (id, nome, email, senha, tipoPerfil) VALUES
-(1, 'Prof. João Costa', 'joao.costa@adapteduca.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Professor'),
-(2, 'Maria Silva', 'maria.silva@aluno.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Aluno'),
-(3, 'Pedro Souza', 'pedro.souza@aluno.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Aluno'),
-(4, 'Sr(a). Silva', 'responsavel.silva@gmail.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Responsavel');
 
-INSERT INTO professor (id, formacao, disciplina) VALUES
-(1, 'Licenciatura em Matemática', 'Matemática');
+-- 2. Aplicar, apenas quando faltarem, as colunas dos SQLs complementares
+-- em bancos que ja tinham sido criados com o esquema antigo.
+DELIMITER $$
+DROP PROCEDURE IF EXISTS adapteduca_atualizar_coluna$$
+CREATE PROCEDURE adapteduca_atualizar_coluna(
+    IN p_tabela VARCHAR(64), IN p_coluna VARCHAR(64), IN p_definicao VARCHAR(255)
+)
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = p_tabela
+          AND COLUMN_NAME = p_coluna
+    ) THEN
+        SET @ddl = CONCAT('ALTER TABLE `',p_tabela,'` ADD COLUMN `',p_coluna,'` ',p_definicao);
+        PREPARE stmt FROM @ddl;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    END IF;
+END$$
+DELIMITER ;
 
-INSERT INTO aluno (id, matricula, preferenciaAprendizagem, progresso, dataNascimento) VALUES
-(2, '20260001', 'Visual', 85.0, '2012-03-14'),
-(3, '20260002', 'Auditivo', 63.0, '2011-09-22');
+CALL adapteduca_atualizar_coluna('atividade','pdfArquivo','LONGTEXT NULL');
+CALL adapteduca_atualizar_coluna('atividade','pdfOriginal','LONGTEXT NULL');
+CALL adapteduca_atualizar_coluna('atividade','links','TEXT NULL');
+CALL adapteduca_atualizar_coluna('conteudo','linkExterno','VARCHAR(2048) NULL');
+DROP PROCEDURE IF EXISTS adapteduca_atualizar_coluna;
 
-INSERT INTO responsavel (id, parentesco, telefone) VALUES
-(4, 'Mãe', '(31) 99999-0001');
+-- Amplia matricula para 50 caracteres. Preserva matriculas cadastradas.
+ALTER TABLE aluno MODIFY COLUMN matricula VARCHAR(50) NOT NULL;
 
-INSERT INTO turma (id, codigo, nome, descricao, professor_id) VALUES
-(1, '9A-2026', '9º Ano A', 'Turma do 9º ano — manhã', 1);
+-- 3. Usuarios e dados demonstrativos que constavam no codigo principal.
+-- Insere o conjunto completo apenas se ainda NAO existe nenhum usuario.
+-- Assim nao recria contas apagadas e nao duplica registros em banco existente.
+DELIMITER $$
+DROP PROCEDURE IF EXISTS adapteduca_inserir_demonstracao$$
+CREATE PROCEDURE adapteduca_inserir_demonstracao()
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM usuario LIMIT 1) THEN
+    INSERT INTO usuario (id, nome, email, senha, tipoPerfil) VALUES
+    (1, 'Prof. João Costa', 'joao.costa@adapteduca.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Professor'),
+    (2, 'Maria Silva', 'maria.silva@aluno.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Aluno'),
+    (3, 'Pedro Souza', 'pedro.souza@aluno.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Aluno'),
+    (4, 'Sr(a). Silva', 'responsavel.silva@gmail.com', 'pbkdf2:sha256:1000000$akqG5qcZjik0hYSG$0947b132256661777cf766c41b674210ac7a78085ff2672148f46b99eec1f284', 'Responsavel');
 
-INSERT INTO aluno_turma (aluno_id, turma_id) VALUES (2,1),(3,1);
-INSERT INTO responsavel_turma (responsavel_id, turma_id) VALUES (4,1);
-INSERT INTO responsavel_aluno (responsavel_id, aluno_id) VALUES (4,2);
+    INSERT INTO professor (id, formacao, disciplina) VALUES
+    (1, 'Licenciatura em Matemática', 'Matemática');
 
-INSERT INTO atividade (titulo, descricao, prazo, status, turma_id) VALUES
-('Equações do 2º Grau', 'Resolver lista de exercícios', '2026-08-15', 'Concluida', 1),
-('Geometria Espacial — Introdução', 'Assistir vídeo e responder questionário', '2026-08-20', 'Pendente', 1),
-('Análise Sintática', 'Exercício de Português', '2026-08-18', 'Pendente', 1);
+    INSERT INTO aluno (id, matricula, preferenciaAprendizagem, progresso, dataNascimento) VALUES
+    (2, '20260001', 'Visual', 85.0, '2012-03-14'),
+    (3, '20260002', 'Auditivo', 63.0, '2011-09-22');
+
+    INSERT INTO responsavel (id, parentesco, telefone) VALUES
+    (4, 'Mãe', '(31) 99999-0001');
+
+    INSERT INTO turma (id, codigo, nome, descricao, professor_id) VALUES
+    (1, '9A-2026', '9º Ano A', 'Turma do 9º ano — manhã', 1);
+
+    INSERT INTO aluno_turma (aluno_id, turma_id) VALUES (2,1),(3,1);
+    INSERT INTO responsavel_turma (responsavel_id, turma_id) VALUES (4,1);
+    INSERT INTO responsavel_aluno (responsavel_id, aluno_id) VALUES (4,2);
+
+    INSERT INTO atividade (titulo, descricao, prazo, status, turma_id) VALUES
+    ('Equações do 2º Grau', 'Resolver lista de exercícios', '2026-08-15', 'Concluida', 1),
+    ('Geometria Espacial — Introdução', 'Assistir vídeo e responder questionário', '2026-08-20', 'Pendente', 1),
+    ('Análise Sintática', 'Exercício de Português', '2026-08-18', 'Pendente', 1);
+    END IF;
+END$$
+DELIMITER ;
+CALL adapteduca_inserir_demonstracao();
+DROP PROCEDURE IF EXISTS adapteduca_inserir_demonstracao;
+
+-- 4. Verificacao final, sem alterar informacoes.
+SHOW TABLES;
+SHOW COLUMNS FROM atividade;
+SHOW COLUMNS FROM conteudo;
+SHOW COLUMNS FROM aluno;
+SELECT id, nome, email, tipoPerfil FROM usuario ORDER BY id;

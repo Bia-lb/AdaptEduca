@@ -1,43 +1,49 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="AdaptEduca — educação personalizada e acessível.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="AdaptEduca — educação personalizada e acessível."
+    >
 
     <title>Criar Conta | AdaptEduca</title>
 
-    <!-- Configuração automática do tema -->
+    <!-- TEMA DO SISTEMA -->
     <script>
         document.documentElement.dataset.theme =
-            localStorage.getItem('adapteduca_theme') ||
-            (matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light');
+            localStorage.getItem("adapteduca_theme") ||
+            (
+                matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light"
+            );
     </script>
 
-    <!-- Arquivos CSS -->
+    <!-- ARQUIVOS CSS -->
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/variables.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/responsive.css">
     <link rel="stylesheet" href="./css/app.css">
+
 </head>
 
 <body data-root="./" data-page="cadastro">
 
-    <!-- Conteúdo principal -->
     <main class="auth-page">
 
-        <!-- Card de cadastro -->
         <section
             class="card auth-card"
-            style="width:min(100%,620px)"
+            style="width: min(100%, 620px)"
         >
 
+            <!-- CABEÇALHO -->
             <div class="auth-icon">♙+</div>
 
             <h1>Criar Conta</h1>
@@ -46,17 +52,17 @@
                 Preencha os dados para começar
             </p>
 
-            <!-- Formulário de cadastro -->
+            <!-- FORMULÁRIO DE CADASTRO -->
             <form class="auth-form" id="registerForm">
 
-                <!-- Seleção do tipo de perfil -->
+                <!-- SELEÇÃO DO PERFIL -->
                 <div class="input-group">
 
                     <label>Tipo de Perfil</label>
 
                     <div class="role-selector">
 
-                        <!-- Perfil Aluno -->
+                        <!-- ALUNO -->
                         <label class="role-option selected">
                             ♙
 
@@ -74,7 +80,7 @@
                             </span>
                         </label>
 
-                        <!-- Perfil Professor -->
+                        <!-- PROFESSOR -->
                         <label class="role-option">
                             ♧
 
@@ -91,7 +97,7 @@
                             </span>
                         </label>
 
-                        <!-- Perfil Responsável -->
+                        <!-- RESPONSÁVEL -->
                         <label class="role-option">
                             ♧
 
@@ -111,7 +117,7 @@
                     </div>
                 </div>
 
-                <!-- Nome completo -->
+                <!-- NOME COMPLETO -->
                 <div class="input-group">
 
                     <label for="name">
@@ -122,12 +128,15 @@
                         class="input"
                         id="name"
                         name="name"
+                        type="text"
                         placeholder="Seu nome completo"
+                        autocomplete="name"
                         required
                     >
+
                 </div>
 
-                <!-- E-mail -->
+                <!-- E-MAIL -->
                 <div class="input-group">
 
                     <label for="email">
@@ -140,34 +149,41 @@
                         name="email"
                         type="email"
                         placeholder="seu@email.com"
+                        autocomplete="email"
                         required
                     >
+
                 </div>
 
-                <!-- Disciplina do professor -->
-                <div class="input-group">
+                
 
-                    <label for="disciplina">
-                        Disciplina que leciona
 
-                        <span class="muted small">
-                            (somente professores, opcional)
-                        </span>
-                    </label>
+<!-- CAMPO EXCLUSIVO DO PROFESSOR -->
+<div
+    class="input-group"
+    id="campoDisciplina"
+    style="display: none;"
+>
+    <label for="disciplina">
+        Disciplina que leciona
+    </label>
 
-                    <input
-                        class="input"
-                        id="disciplina"
-                        name="disciplina"
-                        placeholder="Ex.: Biologia"
-                        maxlength="80"
-                    >
-                </div>
+    <input
+        class="input"
+        id="disciplina"
+        name="disciplina"
+        type="text"
+        placeholder="Ex.: Matemática, Português, Biologia..."
+        maxlength="80"
+    >
+</div>
 
-                <!-- Campos de senha -->
+
+
+                <!-- SENHA E CONFIRMAÇÃO -->
                 <div class="form-row">
 
-                    <!-- Senha -->
+                    <!-- SENHA -->
                     <div class="input-group">
 
                         <label for="password">
@@ -181,11 +197,13 @@
                             type="password"
                             minlength="8"
                             placeholder="••••••••"
+                            autocomplete="new-password"
                             required
                         >
+
                     </div>
 
-                    <!-- Confirmar senha -->
+                    <!-- CONFIRMAR SENHA -->
                     <div class="input-group">
 
                         <label for="confirmPassword">
@@ -199,13 +217,15 @@
                             type="password"
                             minlength="8"
                             placeholder="••••••••"
+                            autocomplete="new-password"
                             required
                         >
+
                     </div>
 
                 </div>
 
-                <!-- Termos de uso e privacidade -->
+                <!-- TERMOS DE USO -->
                 <label class="small muted">
 
                     <input
@@ -216,25 +236,19 @@
 
                     Concordo com os
 
-                    <a
-                        href="#"
-                        style="color:var(--primary)"
-                    >
+                    <a href="#" style="color: var(--primary)">
                         Termos de Uso
                     </a>
 
                     e
 
-                    <a
-                        href="#"
-                        style="color:var(--primary)"
-                    >
+                    <a href="#" style="color: var(--primary)">
                         Política de Privacidade
                     </a>
 
                 </label>
 
-                <!-- Botão de cadastro -->
+                <!-- BOTÃO CRIAR CONTA -->
                 <button
                     class="btn btn-primary btn-block"
                     type="submit"
@@ -242,14 +256,18 @@
                     Criar Conta
                 </button>
 
-                <!-- Separador -->
+                <!-- SEPARADOR -->
                 <div
-                    style="text-align:center;color:var(--text-2);font-size:.75rem"
+                    style="
+                        text-align: center;
+                        color: var(--text-2);
+                        font-size: .75rem;
+                    "
                 >
                     ou
                 </div>
 
-                <!-- Perfil de aprendizagem -->
+                <!-- PERFIL DE APRENDIZAGEM -->
                 <button
                     class="btn btn-outline btn-block"
                     type="button"
@@ -261,14 +279,17 @@
 
             </form>
 
-            <!-- Link para login -->
+            <!-- LINK PARA LOGIN -->
             <p class="auth-footer">
 
                 Já tem uma conta?
 
                 <a
                     href="login.html"
-                    style="color:var(--primary);font-weight:700"
+                    style="
+                        color: var(--primary);
+                        font-weight: 700;
+                    "
                 >
                     Faça login
                 </a>
@@ -277,19 +298,24 @@
 
         </section>
 
-        <!-- Botão de alternância do tema -->
+        <!-- BOTÃO PARA ALTERAR TEMA -->
         <button
             class="theme-toggle"
             type="button"
             data-theme-toggle
-            style="position:fixed;top:14px;right:14px"
+            style="
+                position: fixed;
+                top: 14px;
+                right: 14px;
+            "
+            aria-label="Alternar tema"
         >
             ☾
         </button>
 
     </main>
 
-    <!-- Arquivos JavaScript -->
+    <!-- SCRIPTS DO SISTEMA -->
     <script defer src="./js/data.js"></script>
     <script defer src="./js/theme.js"></script>
     <script defer src="./js/api.js"></script>
@@ -300,6 +326,83 @@
     <script defer src="./js/script.js"></script>
     <script defer src="./js/pages-auth.js"></script>
 
-</body>
+   
 
+
+<!-- CONTROLE DO CAMPO DE DISCIPLINA -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const campoDisciplina =
+        document.getElementById("campoDisciplina");
+
+    const inputDisciplina =
+        document.getElementById("disciplina");
+
+    const opcoes =
+        document.querySelectorAll(".role-option");
+
+    function atualizarCampoDisciplina() {
+
+        const perfilSelecionado =
+            document.querySelector(
+                'input[name="role"]:checked'
+            );
+
+        const ehProfessor =
+            perfilSelecionado?.value === "professor";
+
+        // Mostrar somente para professor
+        campoDisciplina.hidden = !ehProfessor;
+
+        campoDisciplina.style.display =
+            ehProfessor ? "block" : "none";
+
+        // Limpar disciplina dos outros perfis
+        if (!ehProfessor) {
+            inputDisciplina.value = "";
+        }
+    }
+
+    // O navigation.js altera o perfil pelo clique.
+    // Por isso, precisamos escutar o clique também.
+    opcoes.forEach(function (opcao) {
+
+        opcao.addEventListener("click", function () {
+
+            const radio = opcao.querySelector(
+                'input[name="role"]'
+            );
+
+            if (radio) {
+                radio.checked = true;
+            }
+
+            atualizarCampoDisciplina();
+        });
+
+    });
+
+    // Também atende mudanças pelo teclado
+    document.querySelectorAll(
+        'input[name="role"]'
+    ).forEach(function (radio) {
+
+        radio.addEventListener(
+            "change",
+            atualizarCampoDisciplina
+        );
+
+    });
+
+    // Estado inicial
+    atualizarCampoDisciplina();
+
+});
+</script>
+
+
+
+
+</body>
 </html>

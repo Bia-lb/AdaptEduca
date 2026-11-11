@@ -67,7 +67,7 @@ class ConteudoService:
             return c
         return None
 
-
+  
     # ==========================================
     # PUBLICAR CONTEÚDO
     # ==========================================
@@ -237,7 +237,7 @@ class ConteudoService:
         return conteudo
 
 
-
+    
     def caminho_pdf(self, conteudo: Conteudo) -> Optional[str]:
 
         if (
@@ -266,31 +266,153 @@ class ConteudoService:
             except OSError:
                 pass
 
+
+    @staticmethod
+    def dividir_em_partes(texto: str, tamanho: int = 10000) -> list[str]:
+        """Divide textos longos em partes menores."""
+
+        partes = []
+        atual = []
+        quantidade = 0
+
+        for trecho in re.findall(r"\S+\s*", texto):
+
+            if len(trecho) > tamanho:
+                if atual:
+                    partes.append("".join(atual).strip())
+                    atual = []
+                    quantidade = 0
+
+                partes.extend(
+                    trecho[i:i + tamanho]
+                    for i in range(0, len(trecho), tamanho)
+                )
+                continue
+
+            if atual and quantidade + len(trecho) > tamanho:
+                partes.append("".join(atual).strip())
+                atual = []
+                quantidade = 0
+
+            atual.append(trecho)
+            quantidade += len(trecho)
+
+        if atual:
+            partes.append("".join(atual).strip())
+
+        return partes
+
+
     # ── adaptação (RF07/08/09/10/13) ────────────────────────────────────────
-    def adaptar(self, conteudo: Conteudo, modo: str, aluno: Optional[Aluno] = None,
-               usuario_id: Optional[int] = None) -> dict:
+   
+    # ── adaptação (RF07/08/09/10/13) ───────────────────
+
+    def adaptar(
+        self,
+        conteudo: Conteudo,
+        modo: str,
+        aluno: Optional[Aluno] = None,
+        usuario_id: Optional[int] = None,
+        parte: int = 1
+    ) -> dict:
+
         recomendado = False
+
+        # Escolher o modo recomendado para o aluno
         if modo in ("para-mim", "", None):
             quest = aluno.respostas_questionario() if aluno else {}
             modo, recomendado = motor.modo_recomendado(quest), True
+
+        # Validar o modo selecionado
         if modo not in motor.MODOS:
-            raise ValueError(f"Modo inválido. Use: {', '.join(motor.MODOS)}.")
+            raise ValueError(
+                f"Modo inválido. Use: {', '.join(motor.MODOS)}."
+            )
+
         if not conteudo.texto:
-            raise ValueError("Este conteúdo não tem texto para adaptar (é apenas um link).")
+            raise ValueError(
+                "Este conteúdo não tem texto para adaptar."
+            )
+
+        # Dividir PDFs e textos muito longos
+        longo = len(conteudo.texto) > motor.MAX_CARACTERES
+
+        if longo:
+            partes = self.dividir_em_partes(
+                conteudo.texto,
+                tamanho=10000
+            )
+        else:
+            partes = [conteudo.texto]
+
+        # Verificar se a parte solicitada existe
+        if parte < 1 or parte > len(partes):
+            raise ValueError(
+                f"Parte inválida. Escolha entre 1 e {len(partes)}."
+            )
+
+        texto_parte = partes[parte - 1]
         rotulo = motor.MODOS[modo][0]
-        salvo = Adaptacao.query.filter_by(conteudo_id=conteudo.id, modo=rotulo).first()
-        resultado = json.loads(salvo.resultado) if salvo and salvo.resultado else None
-        # Cache compartilhado: um resultado gerado por regras é refeito com IA quando ela estiver disponível.
-        melhorar = (resultado is not None and resultado.get("fonte") != "ia"
-                    and ia_adaptacao.pode_usar(modo, conteudo.texto))
+
+        # Para documentos longos, evitar reutilizar
+        # uma adaptação salva para outra parte do PDF.
+        if longo:
+            salvo = None
+        else:
+            salvo = Adaptacao.query.filter_by(
+                conteudo_id=conteudo.id,
+                modo=rotulo
+            ).first()
+
+        resultado = None
+
+        if salvo and salvo.resultado:
+            resultado = json.loads(salvo.resultado)
+
+        # Tentar melhorar um resultado por regras com IA
+        melhorar = (
+            resultado is not None
+            and resultado.get("fonte") != "ia"
+            and ia_adaptacao.pode_usar(modo, texto_parte)
+        )
+
         if resultado is None or melhorar:
-            resultado = ia_adaptacao.adaptar_com_fallback(usuario_id, modo, conteudo.texto)
-            texto_json = json.dumps(resultado, ensure_ascii=False)
-            if salvo:
-                salvo.resultado = texto_json
-            else:
-                db.session.add(Adaptacao(
-                    conteudo_id=conteudo.id, modo=rotulo, resultado=texto_json,
-                    audio=(modo == "audio"), mapaMental=(modo == "mapa")))
-            db.session.commit()
-        return {"conteudo_id": conteudo.id, "modo": modo, "recomendado": recomendado, "resultado": resultado}
+
+            # Enviar apenas a parte atual para a IA
+            resultado = ia_adaptacao.adaptar_com_fallback(
+                usuario_id,
+                modo,
+                texto_parte
+            )
+
+            # Manter o salvamento para conteúdos menores
+            if not longo:
+
+                texto_json = json.dumps(
+                    resultado,
+                    ensure_ascii=False
+                )
+
+                if salvo:
+                    salvo.resultado = texto_json
+                else:
+                    db.session.add(
+                        Adaptacao(
+                            conteudo_id=conteudo.id,
+                            modo=rotulo,
+                            resultado=texto_json,
+                            audio=(modo == "audio"),
+                            mapaMental=(modo == "mapa")
+                        )
+                    )
+
+                db.session.commit()
+
+        return {
+            "conteudo_id": conteudo.id,
+            "modo": modo,
+            "recomendado": recomendado,
+            "resultado": resultado,
+            "parte": parte,
+            "totalPartes": len(partes)
+        }

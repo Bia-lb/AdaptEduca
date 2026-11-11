@@ -63,19 +63,41 @@ def deletar(id: int):
     return {"sucesso": True, "mensagem": "Conteúdo removido."}
 
 
+
 @conteudo_bp.get("/conteudos/<int:id>/adaptacao")
 @requer_auth()
 def adaptacao(id: int):
-    """?modo=resumo|simplificado|tdah|tea|mapa|audio|flashcards|para-mim"""
+    """Adapta o conteúdo por modo e por parte."""
+
     c = _svc.buscar_visivel(id, g.usuario_id, g.perfil)
+
     if not c:
         return _erro("Conteúdo não encontrado.", 404)
-    aluno = Aluno.buscar_por_id(g.usuario_id) if g.perfil == "Aluno" else None
+
+    aluno = (
+        Aluno.buscar_por_id(g.usuario_id)
+        if g.perfil == "Aluno"
+        else None
+    )
+
     try:
-        dados = _svc.adaptar(c, request.args.get("modo", "para-mim"), aluno, usuario_id=g.usuario_id)
-    except ValueError as exc:
+        parte = int(request.args.get("parte", "1"))
+
+        dados = _svc.adaptar(
+            c,
+            request.args.get("modo", "para-mim"),
+            aluno,
+            usuario_id=g.usuario_id,
+            parte=parte
+        )
+
+    except (ValueError, TypeError) as exc:
         return _erro(str(exc), 422)
-    return {"sucesso": True, "dados": dados}
+
+    return {
+        "sucesso": True,
+        "dados": dados
+    }
 
 
 @conteudo_bp.post("/adaptar")
